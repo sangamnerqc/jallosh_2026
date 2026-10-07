@@ -488,7 +488,7 @@ function countdown(){
   let s;
   if(d>1) s = LANG==="mr" ? `अजून ${d} दिवस · ${d} days to go` : `${d} days to go · अजून ${d} दिवस`;
   else if(d===1) s = LANG==="mr" ? "उद्या! · Tomorrow!" : "Tomorrow! · उद्या!";
-  else if(d===0) s = LANG==="mr" ? "आज महोत्सव! · Festival day" : "Festival day! · आज महोत्सव";
+  else if(d===0) s = LANG==="mr" ? "आज! · Festival day" : "Festival day! · आज";
   else s = LANG==="mr" ? "धन्यवाद! · Thank you" : "Thank you! · धन्यवाद";
   $("#countdown").textContent = s;
 }
