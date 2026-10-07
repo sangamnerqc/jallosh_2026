@@ -1,0 +1,792 @@
+<title>Jallosh 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Mukta:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: phone-first festival app — paithani-silk ground, marigold accents, bottom tab bar, slide-up venue sheet */
+:root{
+  --ink:#1c0e29;       /* deep aubergine silk */
+  --silk:#2a163d;      /* surface */
+  --silk-2:#3a2152;    /* raised surface */
+  --line:#4d2e6a;
+  --paper:#fbefdc;     /* text */
+  --muted:#cdb9da;
+  --gold:#f6a823;      /* marigold */
+  --gold-soft:#f6a82326;
+  --kumkum:#e5465f;
+  --peacock:#1fb39c;
+  --lilac:#b993f5;
+  --saffron:#ff7d3b;
+  --display:"Yatra One","Mukta",system-ui,sans-serif;
+  --body:"Mukta",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:14px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--ink);color:var(--paper)}
+body{font-family:var(--body);font-size:16px;line-height:1.5;margin:0;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--gold)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:0 120px}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--ink) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:760px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.brand{font-family:var(--display);font-size:1.45rem;line-height:1;color:var(--gold);letter-spacing:.01em}
+.brand small{display:block;font-family:var(--body);font-size:.7rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:3px}
+.lang{margin-left:auto;display:flex;background:var(--silk);border:1px solid var(--line);border-radius:999px;padding:3px}
+.lang button{border:0;background:none;padding:4px 12px;border-radius:999px;font-size:.85rem;color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--gold);color:var(--ink);font-weight:700}
+
+/* paithani border */
+.border{height:14px;background:
+  linear-gradient(135deg,var(--gold) 25%,transparent 25%) 0 0/14px 14px,
+  linear-gradient(225deg,var(--gold) 25%,transparent 25%) 0 0/14px 14px,
+  linear-gradient(90deg,var(--kumkum),var(--kumkum));
+  opacity:.9}
+.border.thin{height:8px;background-size:8px 8px,8px 8px,auto}
+
+/* views */
+.view{display:block}
+.view[hidden]{display:none!important}
+
+/* hero */
+.hero{position:relative;padding-block:22px 8px;display:grid;gap:14px}
+.hero-art{position:relative;width:100%;max-width:340px;aspect-ratio:1;margin:0 auto}
+.hero-art canvas{width:100%;height:100%;display:block}
+.hero-art .center{position:absolute;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none}
+.hero-art .center b{font-family:var(--display);font-weight:400;font-size:clamp(2.2rem,11vw,3.4rem);line-height:1;color:var(--paper);text-shadow:0 2px 0 var(--ink),0 0 24px #000a}
+.hero-art .center span{display:block;font-family:var(--display);color:var(--gold);font-size:1.1rem;margin-top:4px;text-shadow:0 1px 0 var(--ink)}
+.welcome{text-align:center;display:grid;gap:6px}
+.welcome h1{font-family:var(--display);font-weight:400;font-size:clamp(1.7rem,6.5vw,2.4rem);line-height:1.15;margin:0;color:var(--gold);text-wrap:balance}
+.welcome .en{font-size:1.05rem;color:var(--paper);font-weight:600;margin:0;text-wrap:balance}
+.welcome p.lead{margin:4px auto 0;max-width:56ch;color:var(--muted);text-wrap:pretty}
+.logos{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:6px}
+.logos figure{margin:0;display:grid;justify-items:center;gap:4px;max-width:120px}
+.logos img{height:72px;width:72px;object-fit:contain;background:var(--paper);border-radius:50%;padding:6px;box-shadow:0 0 0 2px var(--gold)}
+.logos figcaption{font-size:.72rem;color:var(--muted);text-align:center;line-height:1.2}
+.org{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 10px;font-size:.85rem;color:var(--muted)}
+.org b{color:var(--paper);font-weight:600}
+.org i{font-style:normal;color:var(--gold)}
+
+.datecard{margin-top:6px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:var(--silk);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.cal{width:64px;text-align:center;border-radius:10px;overflow:hidden;border:1px solid var(--gold)}
+.cal .m{background:var(--kumkum);font-size:.72rem;font-weight:700;letter-spacing:.1em;padding:2px 0}
+.cal .d{font-family:var(--display);font-size:2rem;line-height:1.2;color:var(--gold)}
+.datecard h3{margin:0;font-size:1.05rem}
+.datecard p{margin:2px 0 0;color:var(--muted);font-size:.92rem}
+.count{display:inline-block;margin-top:6px;background:var(--gold-soft);color:var(--gold);border:1px solid var(--gold);border-radius:999px;padding:1px 10px;font-weight:700;font-size:.85rem}
+
+.sec-h{display:flex;align-items:baseline;gap:10px;margin:26px 0 10px}
+.sec-h h2{font-family:var(--display);font-weight:400;font-size:1.35rem;margin:0;color:var(--paper)}
+.sec-h span{color:var(--muted);font-size:.9rem}
+
+.quick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.qbtn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;border:1px solid var(--line);background:var(--silk);border-radius:var(--r);padding:12px 14px;text-decoration:none;color:var(--paper);min-width:0}
+.qbtn:hover{border-color:var(--gold)}
+.qbtn .ic{font-size:1.25rem;line-height:1;color:var(--gold);margin-bottom:4px}
+.qbtn b{font-size:1rem;font-weight:700}
+.qbtn small{color:var(--muted);font-size:.82rem}
+.qbtn.primary{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.qbtn.primary .ic,.qbtn.primary small{color:var(--ink)}
+
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.cat{position:relative;border:0;text-align:left;border-radius:var(--r);padding:14px;background:var(--silk-2);overflow:hidden;min-height:108px;display:flex;flex-direction:column;justify-content:flex-end}
+.cat::before{content:"";position:absolute;right:-18px;top:-18px;width:72px;height:72px;border-radius:50%;background:var(--c);opacity:.9}
+.cat .glyph{position:absolute;right:8px;top:6px;font-size:1.6rem;color:var(--ink)}
+.cat b{font-family:var(--display);font-weight:400;font-size:1.25rem;line-height:1.1}
+.cat small{color:var(--muted);font-size:.85rem}
+.cat .n{font-size:.75rem;color:var(--c);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:4px}
+
+.note{border-left:3px solid var(--peacock);background:var(--silk);padding:10px 14px;border-radius:0 10px 10px 0;color:var(--muted);font-size:.92rem}
+.note b{color:var(--paper)}
+
+/* events view */
+.tabs{position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:10;background:var(--ink);padding-block:10px 8px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--silk);border-radius:999px;padding:6px 14px;font-weight:600;font-size:.92rem;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--c,var(--gold));border-color:var(--c,var(--gold));color:var(--ink)}
+.search{display:flex;align-items:center;gap:8px;background:var(--silk);border:1px solid var(--line);border-radius:12px;padding:0 12px;margin-top:6px}
+.search input{flex:1;min-width:0;background:none;border:0;color:var(--paper);font:inherit;padding:10px 0;outline:none}
+.search input::placeholder{color:var(--muted)}
+.coord{margin:14px 0 4px;color:var(--muted);font-size:.9rem}
+.coord b{color:var(--paper)}
+.list{display:grid;gap:10px;margin-top:10px}
+.ev{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;text-align:left;width:100%;border:1px solid var(--line);background:var(--silk);border-radius:var(--r);padding:12px 14px}
+.ev:hover{border-color:var(--c)}
+.ev .dot{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 22%,transparent);color:var(--c);font-weight:800;font-variant-numeric:tabular-nums}
+.ev .t{min-width:0}
+.ev .t b{display:block;font-size:1.05rem;line-height:1.25}
+.ev .t small{display:block;color:var(--muted);font-size:.86rem}
+.ev .pin{display:flex;align-items:center;gap:4px;margin-top:3px;font-size:.84rem;color:var(--c);font-weight:600}
+.ev .go{color:var(--muted);font-size:1.3rem}
+.empty{color:var(--muted);text-align:center;padding:30px 0}
+
+/* venues */
+.vgroup{border:1px solid var(--line);border-radius:var(--r);background:var(--silk);overflow:hidden}
+.vgroup h3{margin:0;padding:12px 14px;font-size:1.05rem;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;border-bottom:1px solid var(--line);background:var(--silk-2)}
+.vgroup h3 small{color:var(--muted);font-weight:500;font-size:.85rem}
+.vrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px 14px;border-top:1px dashed var(--line)}
+.vrow:first-of-type{border-top:0}
+.vrow .nm{min-width:0}
+.vrow .nm b{display:block;font-size:.98rem}
+.vrow .nm small{color:var(--muted);font-size:.84rem}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.chip{font-size:.75rem;border-radius:999px;padding:1px 8px;background:color-mix(in srgb,var(--c) 20%,transparent);color:var(--c);border:0;font-weight:600}
+.mapbtn{display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:var(--gold);color:var(--ink);font-weight:700;border-radius:999px;padding:6px 12px;font-size:.85rem;white-space:nowrap}
+
+/* help */
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r)}
+table{border-collapse:collapse;width:100%;min-width:420px;font-size:.9rem}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--silk-2);color:var(--gold);font-weight:700;font-size:.8rem;letter-spacing:.04em}
+td{background:var(--silk)}
+tr:last-child td{border-bottom:0}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.cards2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.mini{border:1px solid var(--line);background:var(--silk);border-radius:var(--r);padding:12px 14px;display:grid;gap:4px;align-content:start}
+.mini b{font-size:1rem}
+.mini small{color:var(--muted)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;border-radius:6px;padding:0 6px;margin-right:4px}
+.tag.g{background:color-mix(in srgb,var(--kumkum) 25%,transparent);color:#ff8fa0}
+.tag.b{background:color-mix(in srgb,var(--peacock) 25%,transparent);color:#6be0cc}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:#0009;z-index:40;opacity:0;transition:opacity .25s}
+.scrim.show{opacity:1}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:50;max-height:92%;overflow-y:auto;background:var(--ink);border-top:1px solid var(--line);border-radius:22px 22px 0 0;transform:translateY(100%);transition:transform .32s cubic-bezier(.2,.8,.2,1);padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+.sheet.show{transform:none}
+.sheet-in{max-width:760px;margin:0 auto;padding-inline:16px}
+.grab{width:44px;height:5px;border-radius:9px;background:var(--line);margin:10px auto 0}
+.sheet-head{display:flex;gap:10px;align-items:flex-start;padding-top:12px}
+.sheet-head .ttl{flex:1;min-width:0}
+.eyebrow{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--c);font-weight:700}
+.sheet h2{font-family:var(--display);font-weight:400;font-size:1.7rem;line-height:1.15;margin:2px 0 0;color:var(--paper);text-wrap:balance}
+.sheet h2 + p{margin:2px 0 0;color:var(--muted);font-weight:600}
+.close{border:1px solid var(--line);background:var(--silk);border-radius:50%;width:38px;height:38px;flex:0 0 auto;font-size:1.1rem}
+.venue-card{margin-top:16px;border-radius:var(--r);padding:16px;background:
+  radial-gradient(circle at 100% 0,color-mix(in srgb,var(--c) 35%,transparent),transparent 60%),var(--silk-2);border:1px solid var(--line)}
+.venue-card .lbl{font-size:.75rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.venue-card .vn{font-size:1.35rem;font-weight:800;line-height:1.2;margin-top:2px}
+.venue-card .vs{color:var(--muted)}
+.venue-card .floor{display:inline-block;margin-top:8px;font-size:.82rem;font-weight:700;border:1px solid var(--c);color:var(--c);border-radius:999px;padding:1px 10px}
+.btnrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.bigbtn{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border-radius:12px;padding:12px;font-weight:800;text-align:center;line-height:1.2}
+.bigbtn.go{background:var(--gold);color:var(--ink)}
+.bigbtn.alt{background:var(--silk);color:var(--paper);border:1px solid var(--line)}
+.bigbtn small{display:block;font-weight:600;font-size:.75rem;opacity:.8}
+
+.path{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:0}
+.path li{display:grid;grid-template-columns:32px 1fr;gap:12px;position:relative;padding-bottom:16px}
+.path li::before{content:"";position:absolute;left:15px;top:30px;bottom:0;border-left:2px dashed var(--line)}
+.path li:last-child::before{display:none}
+.path .st{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:var(--silk-2);border:2px solid var(--c);color:var(--c);font-size:.9rem;position:relative;z-index:1}
+.path li:last-child .st{background:var(--c);color:var(--ink)}
+.path b{display:block;font-size:1rem}
+.path small{color:var(--muted);font-size:.88rem}
+.people{margin-top:8px;display:grid;gap:10px}
+.people h4{margin:12px 0 0;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.plist{display:flex;flex-wrap:wrap;gap:6px}
+.person{background:var(--silk);border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.92rem}
+.phone{display:flex;align-items:center;gap:8px;background:var(--silk);border:1px solid var(--line);border-radius:12px;padding:8px 10px 8px 14px}
+.phone .who{flex:1;min-width:0}
+.phone .who b{display:block;font-size:.95rem}
+.phone .who span{font-variant-numeric:tabular-nums;color:var(--muted);user-select:all}
+.ibtn{border:1px solid var(--line);background:var(--silk-2);border-radius:10px;padding:6px 10px;font-size:.82rem;font-weight:700;text-decoration:none;color:var(--paper);white-space:nowrap}
+.ibtn.call{background:var(--peacock);border-color:var(--peacock);color:var(--ink)}
+
+/* bottom nav */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,var(--silk) 94%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav-in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.nav button{border:0;background:none;padding:8px 4px 10px;display:grid;justify-items:center;gap:1px;color:var(--muted);font-size:.78rem;font-weight:600}
+.nav button .i{font-size:1.25rem;line-height:1.2}
+.nav button[aria-current="page"]{color:var(--gold)}
+.nav button[aria-current="page"] .i{transform:translateY(-1px)}
+
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);opacity:0;background:var(--paper);color:var(--ink);font-weight:700;padding:8px 16px;border-radius:999px;z-index:60;transition:.25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%)}
+
+.foot{margin-top:30px;text-align:center;color:var(--muted);font-size:.85rem;display:grid;gap:4px}
+.foot b{color:var(--paper)}
+
+/* bilingual helpers */
+.sub{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (min-width:620px){.quick{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">जल्लोष २०२६<small>Jallosh 2026 · Youth Festival</small></div>
+    <div class="lang" role="group" aria-label="Language">
+      <button id="lang-mr" data-lang="mr" aria-pressed="true">मराठी</button>
+      <button id="lang-en" data-lang="en" aria-pressed="false">English</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- HOME -->
+  <section class="view" id="view-home">
+    <div class="hero">
+      <div class="hero-art">
+        <canvas id="rangoli" width="680" height="680" aria-hidden="true"></canvas>
+        <div class="center"><div><b>जल्लोष</b><span>२०२६</span></div></div>
+      </div>
+      <div class="welcome">
+        <h1 data-mr="सर्व सहभागी कलाकार व मान्यवरांचे हार्दिक स्वागत!" data-en="A warm welcome to every participant and guest!"></h1>
+        <p class="en" data-mr="A warm welcome to every participant and guest!" data-en="सर्व सहभागी कलाकार व मान्यवरांचे हार्दिक स्वागत!"></p>
+        <p class="lead" data-mr="विद्यापीठस्तरीय आंतरमहाविद्यालयीन युवक महोत्सव. आपला कलाप्रकार निवडा, ठिकाण पहा आणि Google Maps वरून थेट मार्ग मिळवा." data-en="University-level inter-collegiate youth festival. Pick your event, see its venue, and get turn-by-turn directions on Google Maps."></p>
+        <div class="logos" id="logos" hidden></div>
+        <div class="org">
+          <span><i>✦</i> <b data-mr="सावित्रीबाई फुले पुणे विद्यापीठ, पुणे" data-en="Savitribai Phule Pune University, Pune"></b></span>
+          <span><i>✦</i> <b data-mr="संगमनेर महाविद्यालय, संगमनेर" data-en="Sangamner Mahavidyalaya, Sangamner"></b></span>
+        </div>
+      </div>
+      <div class="datecard">
+        <div class="cal"><div class="m">OCT</div><div class="d">09</div></div>
+        <div>
+          <h3 data-mr="शुक्रवार, ०९ ऑक्टोबर २०२६" data-en="Friday, 09 October 2026"></h3>
+          <p data-mr="संगमनेर महाविद्यालय परिसर, घुलेवाडी, पुणे–नाशिक महामार्ग" data-en="Sangamner College campus, Ghulewadi, Pune–Nashik Highway"></p>
+          <span class="count" id="countdown"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-h"><h2 data-mr="त्वरित मदत" data-en="Quick links"></h2></div>
+    <div class="quick">
+      <a class="qbtn primary" id="q-college" target="_blank" rel="noopener">
+        <span class="ic">➤</span><b data-mr="महाविद्यालयाकडे मार्ग" data-en="Directions to college"></b><small>Google Maps</small>
+      </a>
+      <button class="qbtn" data-goto="help" data-anchor="reg">
+        <span class="ic">✎</span><b data-mr="नाव नोंदणी" data-en="Registration"></b><small data-mr="जिल्हानिहाय संपर्क" data-en="District-wise desks"></small>
+      </button>
+      <button class="qbtn" data-goto="help" data-anchor="change">
+        <span class="ic">◐</span><b data-mr="वेशभूषा कक्ष" data-en="Changing rooms"></b><small data-mr="मुली / मुले" data-en="Girls / Boys"></small>
+      </button>
+      <button class="qbtn" data-goto="venues">
+        <span class="ic">⌖</span><b data-mr="सर्व ठिकाणे" data-en="All venues"></b><small data-mr="इमारतनिहाय" data-en="By building"></small>
+      </button>
+    </div>
+
+    <div class="sec-h"><h2 data-mr="कलाप्रकार" data-en="Event categories"></h2><span id="evcount"></span></div>
+    <div class="cats" id="cats"></div>
+
+    <div class="sec-h"><h2 data-mr="सूचना" data-en="Good to know"></h2></div>
+    <div class="note" data-mr="<b>पाऊस आल्यास</b> नाव नोंदणी प्राचार्य म.वि. कौंडिण्य संशोधन भवनाच्या दुसऱ्या व तिसऱ्या मजल्यावर होईल. महाविद्यालय परिसरात पोहोचल्यानंतर फलक व स्वयंसेवकांच्या मदतीने आपल्या ठिकाणी जा." data-en="<b>If it rains,</b> registration moves to the 2nd &amp; 3rd floor of Principal M.V. Kaundinya Research Bhavan. Once inside the campus, follow the signboards and ask any volunteer for your venue."></div>
+
+    <div class="foot">
+      <div data-mr="समन्वयक, जल्लोष २०२६: डॉ. सुरेश गुडदे · डॉ. बाळासाहेब पालवे · डॉ. राजेश्वरी ओझा" data-en="Coordinators, Jallosh 2026: Dr. Suresh Gudade · Dr. Balasaheb Palve · Dr. Rajeshwari Ojha"></div>
+      <div><b data-mr="प्रो. डॉ. अरुण गायकवाड" data-en="Prof. Dr. Arun Gaikwad"></b>, <span data-mr="प्राचार्य" data-en="Principal"></span></div>
+    </div>
+  </section>
+
+  <!-- EVENTS -->
+  <section class="view" id="view-events" hidden>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <label class="search" for="q">
+      <span aria-hidden="true">⌕</span>
+      <input id="q" type="search" autocomplete="off">
+    </label>
+    <div class="coord" id="coord"></div>
+    <div class="list" id="evlist"></div>
+  </section>
+
+  <!-- VENUES -->
+  <section class="view" id="view-venues" hidden>
+    <div class="sec-h"><h2 data-mr="ठिकाणे" data-en="Venues"></h2><span data-mr="इमारतनिहाय यादी" data-en="Grouped by building"></span></div>
+    <div class="list" id="vlist"></div>
+  </section>
+
+  <!-- HELP -->
+  <section class="view" id="view-help" hidden>
+    <div class="sec-h" id="reg"><h2 data-mr="नाव नोंदणी" data-en="Registration"></h2></div>
+    <p class="coord" data-mr="नाव नोंदणी प्रमुख: <b>डॉ. प्रशांत बाविस्कर</b>. आपल्या विभागाच्या नोंदणी कक्षावर स्वयंसेवक मदत करतील." data-en="Registration head: <b>Dr. Prashant Baviskar</b>. Volunteers at your zone's desk will help you."></p>
+    <div class="table-wrap"><table>
+      <thead><tr><th data-mr="विभाग" data-en="Zone"></th><th data-mr="समिती सदस्य" data-en="Committee"></th><th data-mr="स्वयंसेवक" data-en="Volunteers"></th></tr></thead>
+      <tbody id="regbody"></tbody>
+    </table></div>
+    <div class="note" style="margin-top:10px" data-mr="<b>पाऊस आल्यास:</b> नोंदणी प्राचार्य म.वि. कौंडिण्य संशोधन भवन, दुसरा व तिसरा मजला." data-en="<b>If it rains:</b> registration at Principal M.V. Kaundinya Research Bhavan, 2nd &amp; 3rd floor."></div>
+
+    <div class="sec-h" id="change"><h2 data-mr="वेशभूषा चेंजिंग रूम" data-en="Changing rooms"></h2></div>
+    <div class="cards2" id="changecards"></div>
+
+    <div class="sec-h"><h2 data-mr="कार्यालय" data-en="Office"></h2></div>
+    <div class="cards2" id="officecards"></div>
+
+    <div class="foot">
+      <div data-mr="समन्वयक, जल्लोष २०२६: डॉ. सुरेश गुडदे · डॉ. बाळासाहेब पालवे · डॉ. राजेश्वरी ओझा" data-en="Coordinators, Jallosh 2026: Dr. Suresh Gudade · Dr. Balasaheb Palve · Dr. Rajeshwari Ojha"></div>
+      <div><b data-mr="प्रो. डॉ. अरुण गायकवाड" data-en="Prof. Dr. Arun Gaikwad"></b>, <span data-mr="प्राचार्य" data-en="Principal"></span></div>
+    </div>
+  </section>
+</main>
+
+<nav class="nav" aria-label="Main">
+  <div class="nav-in">
+    <button data-view="home" aria-current="page"><span class="i">❁</span><span data-mr="स्वागत" data-en="Home"></span></button>
+    <button data-view="events"><span class="i">♪</span><span data-mr="कार्यक्रम" data-en="Events"></span></button>
+    <button data-view="venues"><span class="i">⌖</span><span data-mr="ठिकाणे" data-en="Venues"></span></button>
+    <button data-view="help"><span class="i">?</span><span data-mr="मदत" data-en="Help"></span></button>
+  </div>
+</nav>
+
+<div class="scrim" id="scrim" hidden></div>
+<section class="sheet" id="sheet" aria-modal="true" role="dialog" aria-labelledby="sh-title" hidden>
+  <div class="grab"></div>
+  <div class="sheet-in" id="sheet-in"></div>
+</section>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ============================================================
+   CONFIG — edit here.
+   COLLEGE: the destination Google Maps navigates to.
+   Each venue can get an exact pin: set lat/lng (e.g. 19.5612, 74.2101).
+   Tip: in Google Maps, long-press the building → copy the numbers shown.
+   When lat/lng are null, the route ends at the college and the
+   in-campus steps guide the visitor the rest of the way.
+   ============================================================ */
+const COLLEGE = {
+  query: "Sangamner Nagarpalika Arts, D.J. Malpani Commerce and B.N. Sarda Science College, Ghulewadi, Sangamner, Maharashtra 422605",
+  lat: null, lng: null
+};
+
+/* LOGOS — paste each logo as a data: URI or an image file path. Empty = hidden. */
+const LOGOS = [
+  {src:"", mr:"सावित्रीबाई फुले पुणे विद्यापीठ", en:"SPPU, Pune"},
+  {src:"", mr:"शिक्षण प्रसारक संस्था, संगमनेर", en:"Shikshan Prasarak Sanstha, Sangamner"}
+];
+
+const V = { // venues
+  rb01:   {mr:"वर्गखोली RB-01", en:"Room RB-01", g:"rb", lat:null,lng:null},
+  rb06:   {mr:"वर्गखोली RB-06", en:"Room RB-06", g:"rb", lat:null,lng:null},
+  seminar:{mr:"नवीन सेमिनार हॉल", en:"New Seminar Hall", g:"seminar", lat:null,lng:null},
+  ph01:   {mr:"PH-01", en:"Hall PH-01", g:"ph", lat:null,lng:null},
+  ph02:   {mr:"PH-02", en:"Hall PH-02", g:"ph", lat:null,lng:null},
+  gandhi: {mr:"गांधी आश्रम", en:"Gandhi Ashram", g:"gandhi", lat:null,lng:null},
+  saibaba:{mr:"साईबाबा सभागृह", en:"Saibaba Auditorium", g:"saibaba", lat:null,lng:null},
+  kokane: {mr:"कोकणे उद्यान", en:"Kokane Garden", g:"kokane", lat:null,lng:null},
+  bafna:  {mr:"बाफना हॉल", en:"Bafna Hall", g:"bed", lat:null,lng:null},
+  bed9:   {mr:"वर्ग खोली ९", en:"Classroom 9", floor:{mr:"पहिला मजला",en:"First floor"}, g:"bed", lat:null,lng:null},
+  bedfy:  {mr:"F.Y.B.Ed. रूम", en:"F.Y.B.Ed. Room", floor:{mr:"तळ मजला",en:"Ground floor"}, g:"bed", lat:null,lng:null},
+  zl1:    {mr:"प्राणीशास्त्र लॅब – १", en:"Zoology Lab 1", g:"zoo", lat:null,lng:null},
+  zl2:    {mr:"प्राणीशास्त्र लॅब – २", en:"Zoology Lab 2", g:"zoo", lat:null,lng:null},
+  zl3:    {mr:"प्राणीशास्त्र लॅब – ३", en:"Zoology Lab 3", g:"zoo", lat:null,lng:null},
+  zcls:   {mr:"प्राणीशास्त्र वर्ग", en:"Zoology Classroom", g:"zoo", lat:null,lng:null},
+  gymg:   {mr:"जिमखाना विभाग", en:"Gymkhana Department", floor:{mr:"तळ मजला",en:"Ground floor"}, g:"gym", lat:null,lng:null},
+  gym1:   {mr:"जिमखाना विभाग", en:"Gymkhana Department", floor:{mr:"पहिला मजला",en:"First floor"}, g:"gym", lat:null,lng:null},
+  kaund:  {mr:"प्राचार्य म.वि. कौंडिण्य संशोधन भवन", en:"Principal M.V. Kaundinya Research Bhavan", floor:{mr:"दुसरा व तिसरा मजला",en:"2nd & 3rd floor"}, g:"kaund", lat:null,lng:null},
+  mba:    {mr:"एम.बी.ए. लायब्ररी", en:"MBA Library", g:"mba", lat:null,lng:null},
+  office: {mr:"वरिष्ठ महाविद्यालय कार्यालय", en:"Senior College Office", g:"office", lat:null,lng:null}
+};
+const G = { // buildings / groups
+  rb:{mr:"RB वर्गखोल्या", en:"RB Rooms"},
+  seminar:{mr:"नवीन सेमिनार हॉल", en:"New Seminar Hall"},
+  ph:{mr:"PH हॉल", en:"PH Halls"},
+  gandhi:{mr:"गांधी आश्रम", en:"Gandhi Ashram"},
+  saibaba:{mr:"साईबाबा सभागृह", en:"Saibaba Auditorium"},
+  kokane:{mr:"कोकणे उद्यान", en:"Kokane Garden"},
+  bed:{mr:"बी.एड. कॉलेज (शिक्षणशास्त्र महाविद्यालय)", en:"B.Ed. College (College of Education)"},
+  zoo:{mr:"प्राणीशास्त्र विभाग", en:"Zoology Department"},
+  gym:{mr:"जिमखाना विभाग", en:"Gymkhana Department"},
+  kaund:{mr:"कौंडिण्य संशोधन भवन", en:"Kaundinya Research Bhavan"},
+  mba:{mr:"एम.बी.ए. लायब्ररी", en:"MBA Library"},
+  office:{mr:"वरिष्ठ महाविद्यालय कार्यालय", en:"Senior College Office"}
+};
+
+const CATS = [
+  {id:"music", mr:"संगीत", en:"Music", glyph:"♪", c:"var(--gold)", coord:{mr:"प्रा. सोनाली परड", en:"Prof. Sonali Parad"}},
+  {id:"dance", mr:"नृत्य", en:"Dance", glyph:"✺", c:"var(--kumkum)", coord:{mr:"प्रा. सुरेखा रहाणे", en:"Prof. Surekha Rahane"}},
+  {id:"theatre", mr:"नाट्य", en:"Theatre", glyph:"◑", c:"var(--peacock)", coord:{mr:"डॉ. परवीन शेख", en:"Dr. Parveen Shaikh"}},
+  {id:"literary", mr:"साहित्य कला", en:"Literary Arts", glyph:"✎", c:"var(--lilac)", coord:null},
+  {id:"fine", mr:"ललित कला", en:"Fine Arts", glyph:"✿", c:"var(--saffron)", coord:{mr:"प्रा. मधुबाला कडलग", en:"Prof. Madhubala Kadlag"}}
+];
+
+const EV = [
+  // music
+  {id:"classical-light-vocal", cat:"music", mr:"शास्त्रीय व सुगम गायन", en:"Classical & Light Vocal", v:"rb01",
+   com:["प्रा. श्वेता थोरात"], vol:["श्री. कुदळ ज्ञानेश्वर","श्री. बांडे नवनाथ"]},
+  {id:"natya-western-vocal", cat:"music", mr:"नाट्यसंगीत व पाश्चात्य गायन (एकल)", en:"Natya Sangeet & Western Vocal (Solo)", v:"rb06",
+   com:["प्रा. दिपाली भोसले"], vol:["श्री. सुपे संदिप","श्री. गोडसे अथर्व"]},
+  {id:"indian-group-folk", cat:"music", mr:"भारतीय समूह गायन व लोकवाद्य वृंद", en:"Indian Group Song & Folk Orchestra", v:"seminar",
+   com:["प्रा. डॉ. बिबवे श्वेता"], vol:["श्री. दिघे आर.ए.","श्री. कहांडळ नचिकेत"]},
+  {id:"indian-percussion", cat:"music", mr:"भारतीय तालवाद्य व स्वरवाद्य (एकल)", en:"Indian Percussion & Melodic Instruments (Solo)", v:"ph01",
+   com:["प्रा. शंकर पावसे"], vol:["श्री. ज्ञानेश्वर गायकवाड","कु. काळे तेजश्री","कु. कोठवळ ज्ञानेश्वरी"]},
+  {id:"western-group-instrument", cat:"music", mr:"पाश्चात्य समूह गायन व पाश्चात्य वाद्य वादन (एकल)", en:"Western Group Song & Western Instrumental (Solo)", v:"ph02",
+   com:["प्रा. राजेंद्र काळे"], vol:["श्री. ज्ञानेश्वर गायकवाड","कु. काळे तेजश्री","कु. कोठवळ ज्ञानेश्वरी"]},
+  // dance
+  {id:"classical-folk-dance", cat:"dance", mr:"शास्त्रीय व लोकनृत्य", en:"Classical & Folk Dance", v:"gandhi",
+   com:["प्रा. शुभम आंबरे","प्रा. सातपुते प्रज्ज्वला","सौ. संगीता खरात"],
+   vol:["श्री. काळे अनिल","श्री. महेश पाचपुते","श्री. अक्षय गाडेकर","श्री. ऋषिकेश पवार","श्री. दिगंबर वर्पे","श्री. क्षिरसागर प्रतिक","कु. रेवगडे आरती"]},
+  // theatre
+  {id:"one-act-mimicry", cat:"theatre", mr:"एकांकिका व नकला", en:"One-Act Play & Mimicry", v:"saibaba",
+   com:["डॉ. हनुमंतराव सोनवलकर"], vol:["श्री. सचिन कवडे","श्री. पठाडे आण्णासाहेब","श्री. काशिनाथ गांगड","श्री. संतोष उघडे","श्री. योगेश अभंग","श्री. कोकणे साहिल"]},
+  {id:"street-play", cat:"theatre", mr:"पथनाट्य", en:"Street Play", v:"kokane",
+   com:["प्रा. विनोद गायकवाड"], vol:["श्री. सोमनाथ सातपुते","श्री. शरद मुंगसे","कु. समिक्षा चौधरी"]},
+  {id:"mime-skit", cat:"theatre", mr:"मूकनाट्य व प्रहसन", en:"Mime & Skit", v:"bafna",
+   com:["डॉ. मंगेश मुंढे","प्रा. माका मनिषा"], vol:["श्री. सुंदर सातपुते","श्री. सुनिल कुदळ","श्री. कैलास दिघे","कु. घुले समृध्दी","कु. पोखरकर सायली"]},
+  // literary
+  {id:"elocution-debate", cat:"literary", mr:"वक्तृत्व व वाद-विवाद", en:"Elocution & Debate", v:"bed9",
+   com:["प्रा. शशिकांत बांगर","प्रा. करण लोखंडे"], vol:["श्री. दये दिपक","श्री. सोनवणे श्रीकांत","श्री. बर्डे शिवम"]},
+  {id:"quiz", cat:"literary", mr:"प्रश्नमंजूषा", en:"Quiz", v:"bedfy",
+   com:["प्रा. इंदिरा अंदेला","प्रा. डॉ. प्रविण रॉयलावार"], vol:["श्री. महेंद्र गोसावी","कु. शिवांजली भुजबळ"]},
+  // fine arts
+  {id:"spot-painting", cat:"fine", mr:"स्पॉट पेंटिंग", en:"On-the-Spot Painting", v:"zl1",
+   com:["प्रा. प्रियंका डुबे"], vol:["श्री. रविंद्र गपले","श्री. श्रेयश जाधव"]},
+  {id:"poster-making", cat:"fine", mr:"पोस्टर मेकिंग", en:"Poster Making", v:"zl2",
+   com:["प्रा. बालोडे बी.आर."], vol:["श्री. बाळासाहेब गाडेकर","श्री. शेटे सुशांत"]},
+  {id:"clay-modelling", cat:"fine", mr:"माती कला", en:"Clay Modelling", v:"zl3",
+   com:["प्रा. सचिन रहाणे"], vol:["श्री. राजेंद्र शेरमाळे","कु. वैष्णवी गांडोळे"]},
+  {id:"cartooning", cat:"fine", mr:"कार्टुनिंग", en:"Cartooning", v:"zcls",
+   com:["प्रा. हर्षल पावसे"], vol:["श्री. आबासाहेब शिंदे","श्री. समाधान जगताप"]},
+  {id:"installation", cat:"fine", mr:"मांडणीकला", en:"Installation Art", v:"gymg",
+   com:["डॉ. महेश नवले"], vol:["श्री. रामदास थोरात","श्री. पवन खेताडे"]},
+  {id:"collage", cat:"fine", mr:"कोलाज", en:"Collage", v:"gym1",
+   com:["प्रा. नवले धन्वंतरी"], vol:["श्री. रावसाहेब गोफणे","कु. स्मिता गोधडे"]},
+  {id:"spot-photography", cat:"fine", mr:"स्पॉट फोटोग्राफी", en:"On-the-Spot Photography", v:"gym1",
+   com:["डॉ. महेंद्र ख्याडे"], vol:["श्री. आण्णासाहेब कांदळकर","कु. ऋतुजा भालेराव"]},
+  {id:"rangoli", cat:"fine", mr:"रांगोळी", en:"Rangoli", v:"gym1",
+   com:["डॉ. हरजित पंजाबी"], vol:["श्री. बाळासाहेब गुंजाळ","श्री. बापुसाहेब जोर्वेकर"]}
+];
+
+const REG = [
+  {mr:"पुणे शहर",en:"Pune City",com:"श्री. स्वप्निल जाधव",v:["कु. सानप सानिया","हासे ओम संभाजी"]},
+  {mr:"पुणे ग्रामीण",en:"Pune Rural",com:"श्री. विशाल मालुंजकर",v:["कु. कुदळ श्रावणी संतोष","नेहे यश नवनाथ"]},
+  {mr:"पिंपरी चिंचवड",en:"Pimpri Chinchwad",com:"श्री. ऋषिकेश कोल्हे",v:["कु. क्षिरसागर संस्कृती","कु. तनुजा वलवे"]},
+  {mr:"अहमदनगर",en:"Ahmednagar",com:"श्री. काशिनाथ गांगड",v:["कु. हांडे मुक्ता","कु. तनवी उघडे"]},
+  {mr:"नाशिक शहर",en:"Nashik City",com:"श्री. विलास केदार",v:["श्री. अंकुश कहांडळ","कु. स्नेहल गुंजाळ"]},
+  {mr:"नाशिक ग्रामीण",en:"Nashik Rural",com:"श्री. रावसाहेब गोफणे",v:["श्री. कृष्णा कर्पे","श्री. प्रज्ञा वाल्हेकर"]}
+];
+
+const CHANGE = [
+  {v:"mba", rooms:[{t:"g",mr:"हॉल – १",en:"Hall 1",staff:"श्रीमती जोशी मॅडम (लायब्ररी)"},{t:"b",mr:"हॉल – २",en:"Hall 2",staff:"श्री. गुळवे गिताराम"}]},
+  {v:"bedfy", g:"bed", rooms:[{t:"g",mr:"F.Y.B.Ed. वर्ग खोली क्र. ०१",en:"F.Y.B.Ed. Classroom 01",staff:"श्रीमती शेळके सुनंदा"},{t:"b",mr:"तळ मजला, वर्ग खोली क्र. ४",en:"Ground floor, Classroom 4",staff:""}]},
+  {v:"saibaba", rooms:[{t:"g",mr:"खोली क्रमांक ०१",en:"Room 01",staff:"श्रीमती लंके शुभांगी"},{t:"b",mr:"वर्ग खोली क्र. ०२",en:"Classroom 02",staff:""}]}
+];
+
+/* ============================ app ============================ */
+let LANG = "mr";
+try{ LANG = localStorage.getItem("jallosh-lang") || "mr"; }catch(e){}
+const other = l => l==="mr" ? "en" : "mr";
+const T = o => o[LANG];
+const S = o => o[other(LANG)];
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const catOf = id => CATS.find(c => c.id===id);
+
+function mapsDir(v){
+  const p = v && v.lat!=null ? `${v.lat},${v.lng}` : (COLLEGE.lat!=null ? `${COLLEGE.lat},${COLLEGE.lng}` : COLLEGE.query);
+  return "https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(p)+"&travelmode=driving";
+}
+function mapsView(v){
+  const p = v && v.lat!=null ? `${v.lat},${v.lng}` : (COLLEGE.lat!=null ? `${COLLEGE.lat},${COLLEGE.lng}` : COLLEGE.query);
+  return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(p);
+}
+function vName(v){ return T(v) + (v.floor ? " · "+T(v.floor) : ""); }
+
+function applyStatic(){
+  document.documentElement.lang = LANG==="mr" ? "mr" : "en";
+  document.querySelectorAll("[data-mr]").forEach(el => { el.innerHTML = el.dataset[LANG]; });
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang===LANG));
+  $("#q").placeholder = LANG==="mr" ? "कार्यक्रम किंवा ठिकाण शोधा… / Search" : "Search event or venue… / शोधा";
+}
+
+/* countdown, IST day-based */
+function countdown(){
+  const now = new Date(Date.now() + 330*60000); // shift to IST
+  const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  const ev = Date.UTC(2026,9,9);
+  const d = Math.round((ev - today)/86400000);
+  let s;
+  if(d>1) s = LANG==="mr" ? `अजून ${d} दिवस · ${d} days to go` : `${d} days to go · अजून ${d} दिवस`;
+  else if(d===1) s = LANG==="mr" ? "उद्या! · Tomorrow!" : "Tomorrow! · उद्या!";
+  else if(d===0) s = LANG==="mr" ? "आज महोत्सव! · Festival day" : "Festival day! · आज महोत्सव";
+  else s = LANG==="mr" ? "धन्यवाद! · Thank you" : "Thank you! · धन्यवाद";
+  $("#countdown").textContent = s;
+}
+
+function renderCats(){
+  $("#evcount").textContent = LANG==="mr" ? `${EV.length} कार्यक्रम` : `${EV.length} events`;
+  $("#cats").innerHTML = CATS.map(c => {
+    const n = EV.filter(e=>e.cat===c.id).length;
+    return `<button class="cat" style="--c:${c.c}" data-cat="${c.id}">
+      <span class="glyph" aria-hidden="true">${c.glyph}</span>
+      <b>${T(c)}</b><small>${S(c)}</small>
+      <span class="n">${n} ${LANG==="mr"?"कार्यक्रम":"events"}</span></button>`;
+  }).join("");
+}
+
+let curCat = "all";
+function renderTabs(){
+  const all = {id:"all", mr:"सर्व", en:"All", c:"var(--gold)"};
+  $("#tabs").innerHTML = [all, ...CATS].map(c =>
+    `<button class="tab" role="tab" style="--c:${c.c}" data-tab="${c.id}" aria-selected="${c.id===curCat}">${T(c)} <span class="sub" style="color:inherit;opacity:.75">· ${S(c)}</span></button>`
+  ).join("");
+}
+function renderEvents(){
+  const q = $("#q").value.trim().toLowerCase();
+  const c = catOf(curCat);
+  $("#coord").innerHTML = c && c.coord
+    ? `${LANG==="mr"?"समन्वयक":"Coordinator"}: <b>${T(c.coord)}</b>` : "";
+  const list = EV.filter(e => (curCat==="all" || e.cat===curCat) &&
+    (!q || [e.mr,e.en,V[e.v].mr,V[e.v].en, catOf(e.cat).en, catOf(e.cat).mr].join(" ").toLowerCase().includes(q)));
+  $("#evlist").innerHTML = list.length ? list.map((e,i) => {
+    const cc = catOf(e.cat), v = V[e.v];
+    return `<button class="ev" style="--c:${cc.c}" data-ev="${e.id}">
+      <span class="dot">${cc.glyph}</span>
+      <span class="t"><b>${esc(T(e))}</b><small>${esc(S(e))}</small>
+      <span class="pin">⌖ ${esc(vName(v))}</span></span>
+      <span class="go" aria-hidden="true">›</span></button>`;
+  }).join("") : `<div class="empty">${LANG==="mr"?"काही सापडले नाही. दुसरा शब्द वापरून पहा.":"Nothing matches. Try another word."}</div>`;
+}
+
+function renderVenues(){
+  const groups = {};
+  Object.entries(V).forEach(([k,v]) => (groups[v.g] ||= []).push(k));
+  $("#vlist").innerHTML = Object.entries(groups).map(([g,keys]) => {
+    const rows = keys.map(k => {
+      const v = V[k];
+      const evs = EV.filter(e=>e.v===k);
+      const extra = [];
+      if(k==="kaund") extra.push(LANG==="mr"?"नाव नोंदणी (पाऊस आल्यास)":"Registration (if it rains)");
+      if(CHANGE.some(c=>c.v===k)) extra.push(LANG==="mr"?"वेशभूषा कक्ष":"Changing rooms");
+      if(k==="office") extra.push(LANG==="mr"?"कार्यालयीन कामकाज, पाहुण्यांचे स्वागत":"Office work, guest reception");
+      return `<div class="vrow"><div class="nm"><b>${esc(vName(v))}</b><small>${esc(S(v))}${v.floor?" · "+esc(S(v.floor)):""}</small>
+        <div class="chips">${evs.map(e=>`<button class="chip" style="--c:${catOf(e.cat).c}" data-ev="${e.id}">${esc(T(e))}</button>`).join("")}
+        ${extra.map(x=>`<span class="chip" style="--c:var(--muted)">${x}</span>`).join("")}</div></div>
+        <a class="mapbtn" href="${mapsDir(v)}" target="_blank" rel="noopener">➤ ${LANG==="mr"?"मार्ग":"Go"}</a></div>`;
+    }).join("");
+    return `<div class="vgroup"><h3>${esc(T(G[g]))} <small>${esc(S(G[g]))}</small></h3>${rows}</div>`;
+  }).join("");
+}
+
+
+function renderHelp(){
+  $("#regbody").innerHTML = REG.map(r => `<tr><td><b>${T(r)}</b><br><span class="sub">${S(r)}</span></td><td>${r.com}</td><td>${r.v.join("<br>")}</td></tr>`).join("");
+  $("#changecards").innerHTML = CHANGE.map(c => {
+    const v = V[c.v], gname = c.g ? G[c.g] : v;
+    return `<div class="mini"><b>${esc(T(gname))}</b><small>${esc(S(gname))}</small>
+      ${c.rooms.map(r=>`<div><span class="tag ${r.t}">${r.t==="g"?(LANG==="mr"?"मुलींसाठी":"Girls"):(LANG==="mr"?"मुलांसाठी":"Boys")}</span>${esc(T(r))}${r.staff?`<br><small>${esc(r.staff)}</small>`:""}</div>`).join("")}
+      <div><a class="mapbtn" href="${mapsDir(v)}" target="_blank" rel="noopener">➤ ${LANG==="mr"?"मार्ग":"Directions"}</a></div></div>`;
+  }).join("");
+  $("#officecards").innerHTML = `<div class="mini"><b>${T(V.office)}</b><small>${S(V.office)}</small>
+    <div>${LANG==="mr"?"कार्यालयीन कामकाज व पाहुण्यांचे स्वागत":"Office work and welcoming guests"}</div>
+    <small>श्री. बडदे प्रशांत · श्री. जेधे नरेंद्र · श्री. कांदळकर आण्णासाहेब</small>
+    <div><a class="mapbtn" href="${mapsDir(V.office)}" target="_blank" rel="noopener">➤ ${LANG==="mr"?"मार्ग":"Directions"}</a></div></div>
+    <div class="mini"><b>${T(V.kaund)}</b><small>${T(V.kaund.floor)}</small>
+    <div>${LANG==="mr"?"पाऊस आल्यास नाव नोंदणी येथे":"Registration moves here if it rains"}</div>
+    <small>${LANG==="mr"?"नाव नोंदणी प्रमुख: डॉ. प्रशांत बाविस्कर":"Registration head: Dr. Prashant Baviskar"}</small>
+    <div><a class="mapbtn" href="${mapsDir(V.kaund)}" target="_blank" rel="noopener">➤ ${LANG==="mr"?"मार्ग":"Directions"}</a></div></div>`;
+}
+
+/* event sheet */
+let lastFocus = null;
+function openEvent(id){
+  const e = EV.find(x=>x.id===id); if(!e) return;
+  const c = catOf(e.cat), v = V[e.v], g = G[v.g];
+  const exact = v.lat!=null;
+  const mr = LANG==="mr";
+  const steps = [
+    {b: mr?"संगमनेर महाविद्यालयात पोहोचा":"Reach Sangamner College",
+     s: mr?"घुलेवाडी, पुणे–नाशिक महामार्ग (NH-60), संगमनेर. वरील Google Maps बटण दाबा.":"Ghulewadi, Pune–Nashik Highway (NH-60), Sangamner. Tap the Google Maps button above."},
+    {b: mr?"नाव नोंदणी पूर्ण करा":"Finish registration",
+     s: mr?"आपल्या जिल्ह्याच्या नोंदणी कक्षावर जा. पाऊस असल्यास: कौंडिण्य संशोधन भवन, २रा व ३रा मजला.":"Go to your district's registration desk. If it rains: Kaundinya Research Bhavan, 2nd & 3rd floor."},
+    {b: (mr?"इमारत: ":"Building: ")+T(g),
+     s: (mr?"फलक पहा किंवा कोणत्याही स्वयंसेवकाला विचारा":"Follow the signboards or ask any volunteer")+" · "+S(g)},
+    {b: (mr?"ठिकाण: ":"Venue: ")+vName(v),
+     s: (mr?"येथे आपला कार्यक्रम होईल":"Your event takes place here")+" · "+S(v)+(v.floor?" · "+S(v.floor):"")}
+  ];
+  if(T(g)===T(v)) steps.splice(2,1);
+  $("#sheet-in").innerHTML = `
+    <div class="sheet-head" style="--c:${c.c}">
+      <div class="ttl"><div class="eyebrow">${c.glyph} ${T(c)} · ${S(c)}</div>
+        <h2 id="sh-title">${esc(T(e))}</h2><p>${esc(S(e))}</p></div>
+      <button class="close" id="sh-close" aria-label="${mr?"बंद करा":"Close"}">✕</button>
+    </div>
+    <div class="venue-card" style="--c:${c.c}">
+      <div class="lbl">${mr?"ठिकाण · Venue":"Venue · ठिकाण"}</div>
+      <div class="vn">${esc(T(v))}</div>
+      <div class="vs">${esc(S(v))}${T(g)!==T(v)?" — "+esc(T(g)):""}</div>
+      ${v.floor?`<span class="floor">${esc(T(v.floor))} · ${esc(S(v.floor))}</span>`:""}
+      <div class="btnrow">
+        <a class="bigbtn go" href="${mapsDir(v)}" target="_blank" rel="noopener">➤ <span>${mr?"मार्ग सुरू करा":"Start navigation"}<small>Google Maps</small></span></a>
+        <a class="bigbtn alt" href="${mapsView(v)}" target="_blank" rel="noopener">⌖ <span>${mr?"नकाशावर पहा":"View on map"}<small>${exact?(mr?"अचूक ठिकाण":"Exact spot"):(mr?"महाविद्यालय परिसर":"College campus")}</small></span></a>
+      </div>
+    </div>
+    <ol class="path" style="--c:${c.c}">${steps.map((s,i)=>`<li><span class="st">${i+1}</span><div><b>${esc(s.b)}</b><small>${esc(s.s)}</small></div></li>`).join("")}</ol>
+    <div class="people">
+      ${c.coord?`<h4>${mr?"विभाग समन्वयक":"Section coordinator"}</h4><div class="plist"><span class="person">${esc(c.coord.mr)}</span></div>`:""}
+      <h4>${mr?"समिती सदस्य":"Committee"}</h4><div class="plist">${e.com.map(p=>`<span class="person">${esc(p)}</span>`).join("")}</div>
+      <div class="note" style="margin-top:12px">${mr?"<b>मदत हवी आहे?</b> ठिकाणावरील समिती सदस्य किंवा वरिष्ठ महाविद्यालय कार्यालयात संपर्क साधा.":"<b>Need help?</b> Ask the committee member at the venue, or visit the Senior College Office."}</div>
+      ${e.vol.length?`<h4>${mr?"शिक्षकेतर व स्वयंसेवक":"Staff & volunteers"}</h4><div class="plist">${e.vol.map(p=>`<span class="person">${esc(p)}</span>`).join("")}</div>`:""}
+    </div>`;
+  lastFocus = document.activeElement;
+  const sh = $("#sheet"), sc = $("#scrim");
+  sh.hidden = false; sc.hidden = false;
+  requestAnimationFrame(()=>{ sh.classList.add("show"); sc.classList.add("show"); });
+  sh.scrollTop = 0;
+  $("#sh-close").focus();
+  setHash(e.id);
+}
+function closeSheet(){
+  const sh = $("#sheet"), sc = $("#scrim");
+  if(sh.hidden) return;
+  sh.classList.remove("show"); sc.classList.remove("show");
+  setTimeout(()=>{ sh.hidden = true; sc.hidden = true; }, 300);
+  setHash(curView==="home"?"":curView);
+  if(lastFocus) lastFocus.focus();
+}
+$("#scrim").addEventListener("click", closeSheet);
+document.addEventListener("keydown", e => { if(e.key==="Escape") closeSheet(); });
+
+/* views */
+let curView = "home";
+function show(view, anchor){
+  curView = view;
+  ["home","events","venues","help"].forEach(v => $("#view-"+v).hidden = v!==view);
+  document.querySelectorAll(".nav button").forEach(b => b.dataset.view===view ? b.setAttribute("aria-current","page") : b.removeAttribute("aria-current"));
+  if(anchor){ const el = document.getElementById(anchor); if(el) setTimeout(()=>el.scrollIntoView({behavior:"smooth",block:"start"}),30); }
+  else window.scrollTo({top:0});
+  setHash(view==="home"?"":view);
+}
+function setHash(h){ try{ history.replaceState(null,"", h?"#"+h:location.pathname+location.search); }catch(e){} }
+
+function renderLogos(){
+  const l = LOGOS.filter(x=>x.src);
+  const box = $("#logos"); box.hidden = !l.length;
+  box.innerHTML = l.map(x=>`<figure><img src="${x.src}" alt="${esc(x.en)} logo"><figcaption>${esc(T(x))}</figcaption></figure>`).join("");
+}
+function renderAll(){
+  applyStatic(); renderLogos(); countdown(); renderCats(); renderTabs(); renderEvents(); renderVenues(); renderHelp();
+  $("#q-college").href = mapsDir(null);
+}
+
+/* events */
+document.addEventListener("click", ev => {
+  const t = ev.target.closest("button,a"); if(!t) return;
+  if(t.dataset.lang){ LANG = t.dataset.lang; try{localStorage.setItem("jallosh-lang",LANG)}catch(e){} renderAll(); return; }
+  if(t.dataset.view){ show(t.dataset.view); return; }
+  if(t.dataset.goto){ show(t.dataset.goto, t.dataset.anchor); return; }
+  if(t.dataset.cat){ curCat = t.dataset.cat; renderTabs(); renderEvents(); show("events"); setHash(curCat); return; }
+  if(t.dataset.tab){ curCat = t.dataset.tab; renderTabs(); renderEvents(); setHash(curCat==="all"?"events":curCat); return; }
+  if(t.dataset.ev){ openEvent(t.dataset.ev); return; }
+  if(t.id==="sh-close"){ closeSheet(); return; }
+});
+let tt; function toast(m){ const el=$("#toast"); el.textContent=m; el.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>el.classList.remove("show"),2200); }
+$("#q").addEventListener("input", renderEvents);
+
+/* deep links: #events #venues #help #music #dance #theatre #literary #fine or an event id */
+function route(){
+  const h = (location.hash||"").slice(1);
+  if(!h) return;
+  if(["events","venues","help"].includes(h)) show(h);
+  else if(CATS.some(c=>c.id===h)){ curCat=h; renderTabs(); renderEvents(); show("events"); setHash(h); }
+  else if(EV.some(e=>e.id===h)){ const e=EV.find(x=>x.id===h); curCat=e.cat; renderTabs(); renderEvents(); show("events"); openEvent(h); }
+}
+
+/* rangoli wheel — draws itself, then keeps turning: rings counter-rotate, petals breathe,
+   dots twinkle, sparks orbit. Tap the wheel for a spin burst. */
+(function rangoli(){
+  const cv = $("#rangoli"), x = cv.getContext("2d");
+  const W = cv.width, C = W/2, TAU = Math.PI*2;
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const col = {gold:css("--gold"),kum:css("--kumkum"),pea:css("--peacock"),lil:css("--lilac"),saf:css("--saffron"),paper:css("--paper"),silk:css("--silk-2"),ink:css("--ink")};
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const rings = [
+    {n:8,  r0:120,r1:200,w:46,c:col.kum, sp: .10},
+    {n:16, r0:190,r1:262,w:30,c:col.gold,sp:-.16},
+    {n:12, r0:140,r1:300,w:22,c:col.pea, sp: .07},
+    {n:24, r0:262,r1:318,w:16,c:col.saf, sp:-.22},
+    {n:32, r0:300,r1:334,w:9, c:col.lil, sp: .28}
+  ];
+  const sparks = Array.from({length:14},(_,i)=>({a:Math.random()*TAU, r:150+Math.random()*190, s:.3+Math.random()*.6, z:1.5+Math.random()*2.5, c:[col.gold,col.paper,col.saf][i%3]}));
+  let boost = 0, spin = 0;
+  function petal(a, r0, r1, w, c, k){
+    const rr = r0 + (r1-r0)*k;
+    x.save(); x.rotate(a);
+    x.beginPath(); x.moveTo(r0,0);
+    x.quadraticCurveTo((r0+rr)/2, -w*k, rr, 0);
+    x.quadraticCurveTo((r0+rr)/2, w*k, r0, 0);
+    x.fillStyle = c; x.fill();
+    // inner vein
+    x.beginPath(); x.moveTo(r0+6,0); x.lineTo(r0+(rr-r0)*.7,0);
+    x.strokeStyle = col.ink; x.globalAlpha = .25; x.lineWidth = 2; x.stroke(); x.globalAlpha = 1;
+    x.restore();
+  }
+  function frame(draw, time){
+    x.setTransform(1,0,0,1,0,0);
+    x.clearRect(0,0,W,W);
+    x.translate(C,C);
+    const breathe = 1 + .018*Math.sin(time*1.6);
+    x.scale(breathe, breathe);
+    // glowing halo
+    const halo = x.createRadialGradient(0,0,90,0,0,340);
+    halo.addColorStop(0, "transparent"); halo.addColorStop(.75, col.gold+"00");
+    halo.addColorStop(.92, col.gold+Math.round(40+30*Math.sin(time*2)).toString(16).padStart(2,"0"));
+    halo.addColorStop(1, "transparent");
+    x.beginPath(); x.arc(0,0,340,0,TAU); x.fillStyle=col.silk; x.globalAlpha=.55; x.fill(); x.globalAlpha=1;
+    x.fillStyle = halo; x.fill();
+    rings.slice().reverse().forEach((r,idx)=>{
+      const ri = rings.length-1-idx;
+      const k = Math.max(0, Math.min(1, draw*1.6 - idx*0.12));
+      if(k<=0) return;
+      const ease = 1-Math.pow(1-k,3);
+      const pulse = 1 + .05*Math.sin(time*2.2 + ri*1.3);
+      const rot = (ri%2? Math.PI/r.n:0) + r.sp*(time + spin)*(1);
+      for(let i=0;i<r.n;i++) petal(i/r.n*TAU + rot, r.r0, r.r0+(r.r1-r.r0)*pulse, r.w, r.c, ease);
+    });
+    const k2 = Math.max(0, Math.min(1, draw*1.6-0.7));
+    // twinkling outer dots, slowly turning
+    for(let i=0;i<48*k2;i++){
+      const a = i/48*TAU - time*.05;
+      x.globalAlpha = .45 + .55*Math.abs(Math.sin(time*2.5 + i*.7));
+      x.beginPath(); x.arc(Math.cos(a)*342, Math.sin(a)*342, 5, 0, TAU); x.fillStyle=col.gold; x.fill();
+    }
+    x.globalAlpha = 1;
+    for(let i=0;i<24*k2;i++){ const a=i/24*TAU + time*.12; x.beginPath(); x.arc(Math.cos(a)*118, Math.sin(a)*118, 6, 0, TAU); x.fillStyle=col.paper; x.fill(); }
+    // orbiting sparks
+    if(draw>=1) sparks.forEach(p=>{
+      const a = p.a + time*p.s*(1+boost*4);
+      const tw = .5+.5*Math.sin(time*4+p.a*5);
+      x.globalAlpha = .35+.65*tw;
+      x.save(); x.translate(Math.cos(a)*p.r, Math.sin(a)*p.r); x.rotate(time);
+      x.fillStyle = p.c; x.beginPath();
+      for(let j=0;j<4;j++){ const aa=j/4*TAU; x.lineTo(Math.cos(aa)*p.z*3, Math.sin(aa)*p.z*3); x.lineTo(Math.cos(aa+TAU/8)*p.z, Math.sin(aa+TAU/8)*p.z); }
+      x.closePath(); x.fill(); x.restore();
+    });
+    x.globalAlpha = 1;
+    // centre medallion with turning dashed ring
+    x.beginPath(); x.arc(0,0,112,0,TAU); x.fillStyle=col.ink; x.fill();
+    x.save(); x.rotate(-time*.3);
+    x.lineWidth=4; x.strokeStyle=col.gold; x.setLineDash([2,10]); x.lineCap="round"; x.stroke(); x.setLineDash([]);
+    x.restore();
+  }
+  if(reduce){ frame(1, 0); return; }
+  frame(1, 0); // complete at rest before the animation starts
+  let st = null, last = 0;
+  function tick(ts){
+    if(st===null) st = ts;
+    const dt = Math.min(.05, (ts-last)/1000 || 0); last = ts;
+    const t = (ts-st)/1000;
+    if(boost>0){ spin += dt*boost*14; boost = Math.max(0, boost - dt*.9); }
+    frame(Math.min(t/1.8, 1), t);
+    requestAnimationFrame(tick);
+  }
+  const start = () => requestAnimationFrame(tick);
+  (document.fonts && document.fonts.ready) ? document.fonts.ready.then(start) : start();
+  const art = cv.parentElement;
+  art.style.cursor = "pointer";
+  art.setAttribute("role","button"); art.setAttribute("tabindex","0");
+  art.setAttribute("aria-label","Spin the rangoli");
+  const kick = () => { boost = 1; };
+  art.addEventListener("click", kick);
+  art.addEventListener("keydown", e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); kick(); } });
+})();
+
+renderAll();
+route();
+window.addEventListener("hashchange", route);
+setInterval(countdown, 60000);
+</script>
