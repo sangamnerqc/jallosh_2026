@@ -590,7 +590,7 @@ function openEvent(id){
     {b: (mr?"इमारत: ":"Building: ")+T(g),
      s: (mr?"फलक पहा किंवा कोणत्याही स्वयंसेवकाला विचारा":"Follow the signboards or ask any volunteer")+" · "+S(g)},
     {b: (mr?"ठिकाण: ":"Venue: ")+vName(v),
-     s: (mr?"येथे आपला कार्यक्रम होईल":"Your event takes place here")+" · "+S(v)+(v.floor?" · "+S(v.floor):"")}
+     s: (mr?"येथे आपले सादरीकरण होईल ":"Your event takes place here")+" · "+S(v)+(v.floor?" · "+S(v.floor):"")}
   ];
   if(T(g)===T(v)) steps.splice(2,1);
   $("#sheet-in").innerHTML = `
