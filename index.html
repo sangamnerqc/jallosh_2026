@@ -337,6 +337,7 @@ tr:last-child td{border-bottom:0}
    Tip: in Google Maps, long-press the building → copy the numbers shown.
    When lat/lng are null, the route ends at the college and the
    in-campus steps guide the visitor the rest of the way.
+   url: the venue's Google Maps share link, used when lat/lng are not set.
    ============================================================ */
 const COLLEGE = {
   query: "Sangamner Nagarpalika Arts, D.J. Malpani Commerce and B.N. Sarda Science College, Ghulewadi, Sangamner, Maharashtra 422605",
@@ -350,26 +351,26 @@ const LOGOS = [
 ];
 
 const V = { // venues
-  rb01:   {mr:"वर्गखोली RB-01", en:"Room RB-01", g:"rb", lat:null,lng:null},
-  rb06:   {mr:"वर्गखोली RB-06", en:"Room RB-06", g:"rb", lat:null,lng:null},
-  seminar:{mr:"नवीन सेमिनार हॉल", en:"New Seminar Hall", g:"seminar", lat:null,lng:null},
-  ph01:   {mr:"PH-01", en:"Hall PH-01", g:"ph", lat:null,lng:null},
-  ph02:   {mr:"PH-02", en:"Hall PH-02", g:"ph", lat:null,lng:null},
-  gandhi: {mr:"गांधी आश्रम", en:"Gandhi Ashram", g:"gandhi", lat:null,lng:null},
-  saibaba:{mr:"साईबाबा सभागृह", en:"Saibaba Auditorium", g:"saibaba", lat:null,lng:null},
-  kokane: {mr:"कोकणे उद्यान", en:"Kokane Garden", g:"kokane", lat:null,lng:null},
-  bafna:  {mr:"बाफना हॉल", en:"Bafna Hall", g:"bed", lat:null,lng:null},
-  bed9:   {mr:"वर्ग खोली ९", en:"Classroom 9", floor:{mr:"पहिला मजला",en:"First floor"}, g:"bed", lat:null,lng:null},
-  bedfy:  {mr:"F.Y.B.Ed. रूम", en:"F.Y.B.Ed. Room", floor:{mr:"तळ मजला",en:"Ground floor"}, g:"bed", lat:null,lng:null},
-  zl1:    {mr:"प्राणीशास्त्र लॅब – १", en:"Zoology Lab 1", g:"zoo", lat:null,lng:null},
-  zl2:    {mr:"प्राणीशास्त्र लॅब – २", en:"Zoology Lab 2", g:"zoo", lat:null,lng:null},
-  zl3:    {mr:"प्राणीशास्त्र लॅब – ३", en:"Zoology Lab 3", g:"zoo", lat:null,lng:null},
-  zcls:   {mr:"प्राणीशास्त्र वर्ग", en:"Zoology Classroom", g:"zoo", lat:null,lng:null},
-  gymg:   {mr:"जिमखाना विभाग", en:"Gymkhana Department", floor:{mr:"तळ मजला",en:"Ground floor"}, g:"gym", lat:null,lng:null},
-  gym1:   {mr:"जिमखाना विभाग", en:"Gymkhana Department", floor:{mr:"पहिला मजला",en:"First floor"}, g:"gym", lat:null,lng:null},
-  kaund:  {mr:"प्राचार्य म.वि. कौंडिण्य संशोधन भवन", en:"Principal M.V. Kaundinya Research Bhavan", floor:{mr:"दुसरा व तिसरा मजला",en:"2nd & 3rd floor"}, g:"kaund", lat:null,lng:null},
-  mba:    {mr:"एम.बी.ए. लायब्ररी", en:"MBA Library", g:"mba", lat:null,lng:null},
-  office: {mr:"वरिष्ठ महाविद्यालय कार्यालय", en:"Senior College Office", g:"office", lat:null,lng:null}
+  rb01:   {mr:"वर्गखोली RB-01", en:"Room RB-01", g:"rb", lat:null,lng:null, url:"https://maps.app.goo.gl/dqzXRCfsufdDC3X29"},
+  rb06:   {mr:"वर्गखोली RB-06", en:"Room RB-06", g:"rb", lat:null,lng:null, url:"https://maps.app.goo.gl/dqzXRCfsufdDC3X29"},
+  seminar:{mr:"नवीन सेमिनार हॉल", en:"New Seminar Hall", g:"seminar", lat:19.591331,lng:74.198409},
+  ph01:   {mr:"PH-01", en:"Hall PH-01", g:"ph", lat:19.591331,lng:74.198409},
+  ph02:   {mr:"PH-02", en:"Hall PH-02", g:"ph", lat:19.591331,lng:74.198409},
+  gandhi: {mr:"गांधी आश्रम", en:"Gandhi Ashram", g:"gandhi", lat:null,lng:null, url:"https://maps.app.goo.gl/xZqzFRbQggvUNB989"},
+  saibaba:{mr:"साईबाबा सभागृह", en:"Saibaba Auditorium", g:"saibaba", lat:19.5910924,lng:74.1981646},
+  kokane: {mr:"कोकणे उद्यान", en:"Kokane Garden", g:"kokane", lat:null,lng:null, url:"https://maps.app.goo.gl/BAgBakdo6vbgaBJD9"},
+  bafna:  {mr:"बाफना हॉल", en:"Bafna Hall", g:"bed", lat:19.590497,lng:74.200265},
+  bed9:   {mr:"वर्ग खोली ९", en:"Classroom 9", floor:{mr:"पहिला मजला",en:"First floor"}, g:"bed", lat:19.590601,lng:74.200453},
+  bedfy:  {mr:"F.Y.B.Ed. रूम", en:"F.Y.B.Ed. Room", floor:{mr:"तळ मजला",en:"Ground floor"}, g:"bed", lat:19.590638,lng:74.200459},
+  zl1:    {mr:"प्राणीशास्त्र लॅब – १", en:"Zoology Lab 1", g:"zoo", lat:19.591802,lng:74.198406},
+  zl2:    {mr:"प्राणीशास्त्र लॅब – २", en:"Zoology Lab 2", g:"zoo", lat:19.591802,lng:74.198406},
+  zl3:    {mr:"प्राणीशास्त्र लॅब – ३", en:"Zoology Lab 3", g:"zoo", lat:19.591802,lng:74.198406},
+  zcls:   {mr:"प्राणीशास्त्र वर्ग", en:"Zoology Classroom", g:"zoo", lat:19.591802,lng:74.198406},
+  gymg:   {mr:"जिमखाना विभाग", en:"Gymkhana Department", floor:{mr:"तळ मजला",en:"Ground floor"}, g:"gym", lat:null,lng:null, url:"https://maps.app.goo.gl/19LfcnzW6TqUyz6k8"},
+  gym1:   {mr:"जिमखाना विभाग", en:"Gymkhana Department", floor:{mr:"पहिला मजला",en:"First floor"}, g:"gym", lat:null,lng:null, url:"https://maps.app.goo.gl/19LfcnzW6TqUyz6k8"},
+  kaund:  {mr:"प्राचार्य म.वि. कौंडिण्य संशोधन भवन", en:"Principal M.V. Kaundinya Research Bhavan", floor:{mr:"दुसरा व तिसरा मजला",en:"2nd & 3rd floor"}, g:"kaund", lat:19.591377,lng:74.198165},
+  mba:    {mr:"एम.बी.ए. लायब्ररी", en:"MBA Library", g:"mba", lat:19.591802,lng:74.198406},
+  office: {mr:"वरिष्ठ महाविद्यालय कार्यालय", en:"Senior College Office", g:"office", lat:null,lng:null, url:"https://maps.app.goo.gl/r7dGDRPnUj4Sg8er7"}
 };
 const G = { // buildings / groups
   rb:{mr:"RB वर्गखोल्या", en:"RB Rooms"},
@@ -399,7 +400,7 @@ const EV = [
   {id:"classical-light-vocal", cat:"music", mr:"शास्त्रीय व सुगम गायन", en:"Classical & Light Vocal", v:"rb01",
    com:["प्रा. श्वेता थोरात"], vol:["श्री. कुदळ ज्ञानेश्वर","श्री. बांडे नवनाथ"]},
   {id:"natya-western-vocal", cat:"music", mr:"नाट्यसंगीत व पाश्चात्य गायन (एकल)", en:"Natya Sangeet & Western Vocal (Solo)", v:"rb06",
-   com:["प्रा. दिपाली भोसले"], vol:["श्री. सुपे संदिप","श्री. गोडसे अथर्व"]},
+   com:["प्रा. दिपाली भोसले"], vol:["श्री. सुपे संदिप","कु. कावेरी शिंदे"]},
   {id:"indian-group-folk", cat:"music", mr:"भारतीय समूह गायन व लोकवाद्य वृंद", en:"Indian Group Song & Folk Orchestra", v:"seminar",
    com:["प्रा. डॉ. बिबवे श्वेता"], vol:["श्री. दिघे आर.ए.","श्री. कहांडळ नचिकेत"]},
   {id:"indian-percussion", cat:"music", mr:"भारतीय तालवाद्य व स्वरवाद्य (एकल)", en:"Indian Percussion & Melodic Instruments (Solo)", v:"ph01",
@@ -412,7 +413,7 @@ const EV = [
    vol:["श्री. काळे अनिल","श्री. महेश पाचपुते","श्री. अक्षय गाडेकर","श्री. ऋषिकेश पवार","श्री. दिगंबर वर्पे","श्री. क्षिरसागर प्रतिक","कु. रेवगडे आरती"]},
   // theatre
   {id:"one-act-mimicry", cat:"theatre", mr:"एकांकिका व नकला", en:"One-Act Play & Mimicry", v:"saibaba",
-   com:["डॉ. हनुमंतराव सोनवलकर"], vol:["श्री. सचिन कवडे","श्री. पठाडे आण्णासाहेब","श्री. काशिनाथ गांगड","श्री. संतोष उघडे","श्री. योगेश अभंग","श्री. कोकणे साहिल"]},
+   com:["डॉ. हनुमंतराव सोनवलकर"], vol:["श्री. काशिद संजय – प्रमुख","श्री. सचिन कवडे","श्री. पठाडे आण्णासाहेब","श्री. काशिनाथ गांगड","श्री. संतोष उघडे","श्री. योगेश अभंग","श्री. कोकणे साहिल"]},
   {id:"street-play", cat:"theatre", mr:"पथनाट्य", en:"Street Play", v:"kokane",
    com:["प्रा. विनोद गायकवाड"], vol:["श्री. सोमनाथ सातपुते","श्री. शरद मुंगसे","कु. समिक्षा चौधरी"]},
   {id:"mime-skit", cat:"theatre", mr:"मूकनाट्य व प्रहसन", en:"Mime & Skit", v:"bafna",
@@ -424,34 +425,34 @@ const EV = [
    com:["प्रा. इंदिरा अंदेला","प्रा. डॉ. प्रविण रॉयलावार"], vol:["श्री. महेंद्र गोसावी","कु. शिवांजली भुजबळ"]},
   // fine arts
   {id:"spot-painting", cat:"fine", mr:"स्पॉट पेंटिंग", en:"On-the-Spot Painting", v:"zl1",
-   com:["प्रा. प्रियंका डुबे"], vol:["श्री. रविंद्र गपले","श्री. श्रेयश जाधव"]},
+   com:["प्रा. प्रियंका डुबे"], vol:["श्री. रविंद्र गपले","श्री. श्रेयश जाधव","श्री. गोफणे बी.के. – प्रमुख"]},
   {id:"poster-making", cat:"fine", mr:"पोस्टर मेकिंग", en:"Poster Making", v:"zl2",
-   com:["प्रा. बालोडे बी.आर."], vol:["श्री. बाळासाहेब गाडेकर","श्री. शेटे सुशांत"]},
+   com:["प्रा. बालोडे बी.आर."], vol:["श्री. बाळासाहेब गाडेकर","श्री. शेटे सुशांत","श्री. गोफणे बी.के. – प्रमुख"]},
   {id:"clay-modelling", cat:"fine", mr:"माती कला", en:"Clay Modelling", v:"zl3",
-   com:["प्रा. सचिन रहाणे"], vol:["श्री. राजेंद्र शेरमाळे","कु. वैष्णवी गांडोळे"]},
+   com:["प्रा. सचिन रहाणे"], vol:["श्री. घोटेकर गणेश","कु. वैष्णवी गांडोळे","श्री. गोफणे बी.के. – प्रमुख"]},
   {id:"cartooning", cat:"fine", mr:"कार्टुनिंग", en:"Cartooning", v:"zcls",
-   com:["प्रा. हर्षल पावसे"], vol:["श्री. आबासाहेब शिंदे","श्री. समाधान जगताप"]},
+   com:["प्रा. हर्षल पावसे"], vol:["श्री. आबासाहेब शिंदे","श्री. समाधान जगताप","श्री. गोफणे बी.के. – प्रमुख"]},
   {id:"installation", cat:"fine", mr:"मांडणीकला", en:"Installation Art", v:"gymg",
-   com:["डॉ. महेश नवले"], vol:["श्री. रामदास थोरात","श्री. पवन खेताडे"]},
+   com:["डॉ. महेश नवले"], vol:["श्री. रामदास थोरात","श्री. पवन खेताडे","श्री. जाधव आर.डी. – प्रमुख"]},
   {id:"collage", cat:"fine", mr:"कोलाज", en:"Collage", v:"gym1",
-   com:["प्रा. नवले धन्वंतरी"], vol:["श्री. रावसाहेब गोफणे","कु. स्मिता गोधडे"]},
+   com:["प्रा. नवले धन्वंतरी"], vol:["श्री. रावसाहेब गोफणे","कु. स्मिता गोधडे","श्री. जाधव आर.डी. – प्रमुख"]},
   {id:"spot-photography", cat:"fine", mr:"स्पॉट फोटोग्राफी", en:"On-the-Spot Photography", v:"gym1",
-   com:["डॉ. महेंद्र ख्याडे"], vol:["श्री. आण्णासाहेब कांदळकर","कु. ऋतुजा भालेराव"]},
+   com:["डॉ. महेंद्र ख्याडे"], vol:["श्री. आण्णासाहेब कांदळकर","कु. ऋतुजा भालेराव","श्री. जाधव आर.डी. – प्रमुख"]},
   {id:"rangoli", cat:"fine", mr:"रांगोळी", en:"Rangoli", v:"gym1",
-   com:["डॉ. हरजित पंजाबी"], vol:["श्री. बाळासाहेब गुंजाळ","श्री. बापुसाहेब जोर्वेकर"]}
+   com:["डॉ. हरजित पंजाबी"], vol:["श्री. बाळासाहेब गुंजाळ","श्री. बापुसाहेब जोर्वेकर","श्री. जाधव आर.डी. – प्रमुख"]}
 ];
 
 const REG = [
-  {mr:"पुणे शहर",en:"Pune City",com:"श्री. स्वप्निल जाधव",v:["कु. सानप सानिया","हासे ओम संभाजी"]},
+  {mr:"पुणे शहर",en:"Pune City",com:"श्री. कवडे एम.एस.",v:["कु. सानप सानिया","गोडसे अथर्व"]},
   {mr:"पुणे ग्रामीण",en:"Pune Rural",com:"श्री. विशाल मालुंजकर",v:["कु. कुदळ श्रावणी संतोष","नेहे यश नवनाथ"]},
-  {mr:"पिंपरी चिंचवड",en:"Pimpri Chinchwad",com:"श्री. ऋषिकेश कोल्हे",v:["कु. क्षिरसागर संस्कृती","कु. तनुजा वलवे"]},
-  {mr:"अहमदनगर",en:"Ahmednagar",com:"श्री. काशिनाथ गांगड",v:["कु. हांडे मुक्ता","कु. तनवी उघडे"]},
-  {mr:"नाशिक शहर",en:"Nashik City",com:"श्री. विलास केदार",v:["श्री. अंकुश कहांडळ","कु. स्नेहल गुंजाळ"]},
-  {mr:"नाशिक ग्रामीण",en:"Nashik Rural",com:"श्री. रावसाहेब गोफणे",v:["श्री. कृष्णा कर्पे","श्री. प्रज्ञा वाल्हेकर"]}
+  {mr:"पिंपरी चिंचवड",en:"Pimpri Chinchwad",com:"श्री. योगेश कटके",v:["कु. क्षिरसागर संस्कृती","कु. तनुजा वलवे"]},
+  {mr:"अहमदनगर",en:"Ahmednagar",com:"श्री. यशवंत गांगड",v:["कु. हांडे मुक्ता","कु. तनवी उघडे"]},
+  {mr:"नाशिक शहर",en:"Nashik City",com:"श्री. ऋषीकेश कोल्हे",v:["श्री. अंकुश कहांडळ","कु. स्नेहल गुंजाळ"]},
+  {mr:"नाशिक ग्रामीण",en:"Nashik Rural",com:"श्री. संदिप कदम",v:["श्री. कृष्णा कर्पे","श्री. प्रज्ञा वाल्हेकर"]}
 ];
 
 const CHANGE = [
-  {v:"mba", rooms:[{t:"g",mr:"हॉल – १",en:"Hall 1",staff:"श्रीमती जोशी मॅडम (लायब्ररी)"},{t:"b",mr:"हॉल – २",en:"Hall 2",staff:"श्री. गुळवे गिताराम"}]},
+  {v:"mba", rooms:[{t:"g",mr:"हॉल – १",en:"Hall 1",staff:"श्रीमती जोशी मॅडम (लायब्ररी)"},{t:"b",mr:"हॉल – २",en:"Hall 2",staff:"श्री. गुळवे गिताराम / श्री. सचिन नवले"}]},
   {v:"bedfy", g:"bed", rooms:[{t:"g",mr:"F.Y.B.Ed. वर्ग खोली क्र. ०१",en:"F.Y.B.Ed. Classroom 01",staff:"श्रीमती शेळके सुनंदा"},{t:"b",mr:"तळ मजला, वर्ग खोली क्र. ४",en:"Ground floor, Classroom 4",staff:""}]},
   {v:"saibaba", rooms:[{t:"g",mr:"खोली क्रमांक ०१",en:"Room 01",staff:"श्रीमती लंके शुभांगी"},{t:"b",mr:"वर्ग खोली क्र. ०२",en:"Classroom 02",staff:""}]}
 ];
@@ -467,10 +468,12 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":
 const catOf = id => CATS.find(c => c.id===id);
 
 function mapsDir(v){
+  if(v && v.lat==null && v.url) return v.url;
   const p = v && v.lat!=null ? `${v.lat},${v.lng}` : (COLLEGE.lat!=null ? `${COLLEGE.lat},${COLLEGE.lng}` : COLLEGE.query);
   return "https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(p)+"&travelmode=driving";
 }
 function mapsView(v){
+  if(v && v.lat==null && v.url) return v.url;
   const p = v && v.lat!=null ? `${v.lat},${v.lng}` : (COLLEGE.lat!=null ? `${COLLEGE.lat},${COLLEGE.lng}` : COLLEGE.query);
   return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(p);
 }
@@ -564,6 +567,7 @@ function renderHelp(){
   $("#officecards").innerHTML = `<div class="mini"><b>${T(V.office)}</b><small>${S(V.office)}</small>
     <div>${LANG==="mr"?"कार्यालयीन कामकाज व पाहुण्यांचे स्वागत":"Office work and welcoming guests"}</div>
     <small>श्री. बडदे प्रशांत · श्री. जेधे नरेंद्र · श्री. कांदळकर आण्णासाहेब</small>
+    <small><b>${LANG==="mr"?"राखीव":"Reserve"}:</b> किशोर गायकवाड · हिरे आकाश · श्री. राजेंद्र शेरमाळे · गपले सत्यम · श्री. शरद मुंगसे · बढे संदिप</small>
     <div><a class="mapbtn" href="${mapsDir(V.office)}" target="_blank" rel="noopener">➤ ${LANG==="mr"?"मार्ग":"Directions"}</a></div></div>
     <div class="mini"><b>${T(V.kaund)}</b><small>${T(V.kaund.floor)}</small>
     <div>${LANG==="mr"?"पाऊस आल्यास नाव नोंदणी येथे":"Registration moves here if it rains"}</div>
@@ -576,7 +580,7 @@ let lastFocus = null;
 function openEvent(id){
   const e = EV.find(x=>x.id===id); if(!e) return;
   const c = catOf(e.cat), v = V[e.v], g = G[v.g];
-  const exact = v.lat!=null;
+  const exact = v.lat!=null || !!v.url;
   const mr = LANG==="mr";
   const steps = [
     {b: mr?"संगमनेर महाविद्यालयात पोहोचा":"Reach Sangamner College",
