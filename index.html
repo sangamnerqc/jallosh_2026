@@ -351,14 +351,14 @@ const LOGOS = [
 ];
 
 const V = { // venues
-  rb01:   {mr:"वर्गखोली RB-01", en:"Room RB-01", g:"rb", lat:null,lng:null, url:"https://maps.app.goo.gl/dqzXRCfsufdDC3X29"},
-  rb06:   {mr:"वर्गखोली RB-06", en:"Room RB-06", g:"rb", lat:null,lng:null, url:"https://maps.app.goo.gl/dqzXRCfsufdDC3X29"},
+  rb01:   {mr:"वर्गखोली RB-01", en:"Room RB-01", g:"rb", lat:19.591398,lng:74.198173},
+  rb06:   {mr:"वर्गखोली RB-06", en:"Room RB-06", g:"rb", lat:19.591398,lng:74.198173},
   seminar:{mr:"नवीन सेमिनार हॉल", en:"New Seminar Hall", g:"seminar", lat:19.591331,lng:74.198409},
   ph01:   {mr:"PH-01", en:"Hall PH-01", g:"ph", lat:19.591331,lng:74.198409},
   ph02:   {mr:"PH-02", en:"Hall PH-02", g:"ph", lat:19.591331,lng:74.198409},
-  gandhi: {mr:"गांधी आश्रम", en:"Gandhi Ashram", g:"gandhi", lat:null,lng:null, url:"https://maps.app.goo.gl/xZqzFRbQggvUNB989"},
+  gandhi: {mr:"गांधी आश्रम", en:"Gandhi Ashram", g:"gandhi", lat:19.591662,lng:74.198733},
   saibaba:{mr:"साईबाबा सभागृह", en:"Saibaba Auditorium", g:"saibaba", lat:19.5910924,lng:74.1981646},
-  kokane: {mr:"कोकणे उद्यान", en:"Kokane Garden", g:"kokane", lat:null,lng:null, url:"https://maps.app.goo.gl/BAgBakdo6vbgaBJD9"},
+  kokane: {mr:"कोकणे उद्यान", en:"Kokane Garden", g:"kokane", lat:19.590695,lng:74.198022},
   bafna:  {mr:"बाफना हॉल", en:"Bafna Hall", g:"bed", lat:19.590497,lng:74.200265},
   bed9:   {mr:"वर्ग खोली ९", en:"Classroom 9", floor:{mr:"पहिला मजला",en:"First floor"}, g:"bed", lat:19.590601,lng:74.200453},
   bedfy:  {mr:"F.Y.B.Ed. रूम", en:"F.Y.B.Ed. Room", floor:{mr:"तळ मजला",en:"Ground floor"}, g:"bed", lat:19.590638,lng:74.200459},
@@ -366,11 +366,11 @@ const V = { // venues
   zl2:    {mr:"प्राणीशास्त्र लॅब – २", en:"Zoology Lab 2", g:"zoo", lat:19.591802,lng:74.198406},
   zl3:    {mr:"प्राणीशास्त्र लॅब – ३", en:"Zoology Lab 3", g:"zoo", lat:19.591802,lng:74.198406},
   zcls:   {mr:"प्राणीशास्त्र वर्ग", en:"Zoology Classroom", g:"zoo", lat:19.591802,lng:74.198406},
-  gymg:   {mr:"जिमखाना विभाग", en:"Gymkhana Department", floor:{mr:"तळ मजला",en:"Ground floor"}, g:"gym", lat:null,lng:null, url:"https://maps.app.goo.gl/19LfcnzW6TqUyz6k8"},
-  gym1:   {mr:"जिमखाना विभाग", en:"Gymkhana Department", floor:{mr:"पहिला मजला",en:"First floor"}, g:"gym", lat:null,lng:null, url:"https://maps.app.goo.gl/19LfcnzW6TqUyz6k8"},
+  gymg:   {mr:"जिमखाना विभाग", en:"Gymkhana Department", floor:{mr:"तळ मजला",en:"Ground floor"}, g:"gym", lat:19.590191,lng:74.199308},
+  gym1:   {mr:"जिमखाना विभाग", en:"Gymkhana Department", floor:{mr:"पहिला मजला",en:"First floor"}, g:"gym", lat:19.590191,lng:74.199308},
   kaund:  {mr:"प्राचार्य म.वि. कौंडिण्य संशोधन भवन", en:"Principal M.V. Kaundinya Research Bhavan", floor:{mr:"दुसरा व तिसरा मजला",en:"2nd & 3rd floor"}, g:"kaund", lat:19.591377,lng:74.198165},
   mba:    {mr:"एम.बी.ए. लायब्ररी", en:"MBA Library", g:"mba", lat:19.591802,lng:74.198406},
-  office: {mr:"वरिष्ठ महाविद्यालय कार्यालय", en:"Senior College Office", g:"office", lat:null,lng:null, url:"https://maps.app.goo.gl/r7dGDRPnUj4Sg8er7"}
+  office: {mr:"वरिष्ठ महाविद्यालय कार्यालय", en:"Senior College Office", g:"office", lat:19.590312,lng:74.198387}
 };
 const G = { // buildings / groups
   rb:{mr:"RB वर्गखोल्या", en:"RB Rooms"},
@@ -590,7 +590,7 @@ function openEvent(id){
     {b: (mr?"इमारत: ":"Building: ")+T(g),
      s: (mr?"फलक पहा किंवा कोणत्याही स्वयंसेवकाला विचारा":"Follow the signboards or ask any volunteer")+" · "+S(g)},
     {b: (mr?"ठिकाण: ":"Venue: ")+vName(v),
-     s: (mr?"येथे आपले सादरीकरण होईल ":"Your event takes place here")+" · "+S(v)+(v.floor?" · "+S(v.floor):"")}
+     s: (mr?"येथे आपला कार्यक्रम होईल":"Your event takes place here")+" · "+S(v)+(v.floor?" · "+S(v.floor):"")}
   ];
   if(T(g)===T(v)) steps.splice(2,1);
   $("#sheet-in").innerHTML = `
@@ -622,17 +622,19 @@ function openEvent(id){
   requestAnimationFrame(()=>{ sh.classList.add("show"); sc.classList.add("show"); });
   sh.scrollTop = 0;
   $("#sh-close").focus();
-  setHash(e.id);
+  setHash(e.id, false, {sheet:true});
 }
-function closeSheet(){
+function closeSheet(fromHistory){
   const sh = $("#sheet"), sc = $("#scrim");
   if(sh.hidden) return;
+  // opened with its own history step → step back, popstate finishes the close
+  if(!fromHistory && history.state && history.state.sheet){ history.back(); return; }
   sh.classList.remove("show"); sc.classList.remove("show");
   setTimeout(()=>{ sh.hidden = true; sc.hidden = true; }, 300);
-  setHash(curView==="home"?"":curView);
+  if(!fromHistory) setHash(curView==="home"?"":curView, true);
   if(lastFocus) lastFocus.focus();
 }
-$("#scrim").addEventListener("click", closeSheet);
+$("#scrim").addEventListener("click", () => closeSheet());
 document.addEventListener("keydown", e => { if(e.key==="Escape") closeSheet(); });
 
 /* views */
@@ -645,7 +647,18 @@ function show(view, anchor){
   else window.scrollTo({top:0});
   setHash(view==="home"?"":view);
 }
-function setHash(h){ try{ history.replaceState(null,"", h?"#"+h:location.pathname+location.search); }catch(e){} }
+/* history: each screen change adds a step, so the phone's Back button walks back through
+   the app (closes the event card, returns to the previous tab) instead of leaving the page */
+let ROUTING = false;
+function setHash(h, replace, state){
+  if(ROUTING) return; // the address is already right when Back/Forward or a shared link brought us here
+  const url = h ? "#"+h : location.pathname+location.search;
+  if((location.hash||"") === (h ? "#"+h : "")) return;
+  try{
+    if(replace) history.replaceState(state||null, "", url);
+    else history.pushState(state||null, "", url);
+  }catch(e){}
+}
 
 function renderLogos(){
   const l = LOGOS.filter(x=>x.src);
@@ -663,8 +676,8 @@ document.addEventListener("click", ev => {
   if(t.dataset.lang){ LANG = t.dataset.lang; try{localStorage.setItem("jallosh-lang",LANG)}catch(e){} renderAll(); return; }
   if(t.dataset.view){ show(t.dataset.view); return; }
   if(t.dataset.goto){ show(t.dataset.goto, t.dataset.anchor); return; }
-  if(t.dataset.cat){ curCat = t.dataset.cat; renderTabs(); renderEvents(); show("events"); setHash(curCat); return; }
-  if(t.dataset.tab){ curCat = t.dataset.tab; renderTabs(); renderEvents(); setHash(curCat==="all"?"events":curCat); return; }
+  if(t.dataset.cat){ curCat = t.dataset.cat; renderTabs(); renderEvents(); show("events"); setHash(curCat, true); return; }
+  if(t.dataset.tab){ curCat = t.dataset.tab; renderTabs(); renderEvents(); setHash(curCat==="all"?"events":curCat, true); return; }
   if(t.dataset.ev){ openEvent(t.dataset.ev); return; }
   if(t.id==="sh-close"){ closeSheet(); return; }
 });
@@ -674,10 +687,15 @@ $("#q").addEventListener("input", renderEvents);
 /* deep links: #events #venues #help #music #dance #theatre #literary #fine or an event id */
 function route(){
   const h = (location.hash||"").slice(1);
-  if(!h) return;
-  if(["events","venues","help"].includes(h)) show(h);
-  else if(CATS.some(c=>c.id===h)){ curCat=h; renderTabs(); renderEvents(); show("events"); setHash(h); }
-  else if(EV.some(e=>e.id===h)){ const e=EV.find(x=>x.id===h); curCat=e.cat; renderTabs(); renderEvents(); show("events"); openEvent(h); }
+  const isEv = EV.some(e=>e.id===h);
+  ROUTING = true;
+  try{
+    if(!isEv) closeSheet(true);
+    if(!h){ if(curView!=="home") show("home"); }
+    else if(["events","venues","help"].includes(h)){ if(curView!==h) show(h); }
+    else if(CATS.some(c=>c.id===h)){ if(curCat!==h){ curCat=h; renderTabs(); renderEvents(); } if(curView!=="events") show("events"); }
+    else if(isEv){ const e=EV.find(x=>x.id===h); if(curCat!=="all" && curCat!==e.cat){ curCat=e.cat; renderTabs(); renderEvents(); } if(curView!=="events") show("events"); openEvent(h); }
+  } finally { ROUTING = false; }
 }
 
 /* rangoli wheel — draws itself, then keeps turning: rings counter-rotate, petals breathe,
@@ -783,6 +801,6 @@ renderAll();
 route();
 /* keep the sticky event tabs just under the header, whatever its height */
 (function(){ const h=document.querySelector(".top"); const set=()=>document.documentElement.style.setProperty("--top-h", h.offsetHeight+"px"); set(); try{ new ResizeObserver(set).observe(h); }catch(e){ addEventListener("resize", set); } })();
-window.addEventListener("hashchange", route);
+window.addEventListener("popstate", route);
 setInterval(countdown, 60000);
 </script>
