@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Jallosh 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -148,6 +149,21 @@ tr:last-child td{border-bottom:0}
 .mini{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:12px 14px;display:grid;gap:4px;align-content:start}
 .mini b{font-size:1rem}
 .mini small{color:var(--muted)}
+/* facilities (home): Xerox centre + nearest washroom */
+button.mapbtn{border:0;font:inherit;font-weight:700;font-size:.85rem;cursor:pointer}
+.mapbtn.ghost{background:var(--surface-2);color:var(--primary);border:1px solid var(--line)}
+.mini .fac-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px}
+.mini .dist{display:inline-block;background:color-mix(in srgb,var(--primary) 12%,transparent);color:var(--primary);border-radius:999px;padding:0 8px;font-weight:700;font-size:.8rem}
+.mini .wlist{display:grid;gap:6px;margin-top:6px}
+.mini .wlist div{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding-top:6px}
+.mini.wide{grid-column:1/-1}
+.wc-map{position:relative;isolation:isolate;height:340px;border-radius:10px;border:1px solid var(--line);margin-top:6px;overflow:hidden;background:var(--surface-2);z-index:0}
+.wc-maperr{padding:16px;color:var(--muted);font-size:.9rem}
+.wc-pin{width:30px;height:30px;border-radius:50%;background:var(--primary);color:#fff;font-weight:800;display:grid;place-items:center;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4);font-family:var(--body)}
+.wc-pin.near{background:var(--kumkum);transform:scale(1.2)}
+.wc-pop{display:grid;gap:6px;font-family:var(--body);min-width:140px}
+.wc-pop .mapbtn{color:var(--on-primary);justify-content:center}
+.wc-pop .near-tag{margin-left:6px;font-size:.75rem;font-weight:700;color:var(--kumkum)}
 .tag{display:inline-block;font-size:.74rem;font-weight:700;border-radius:6px;padding:0 6px;margin-right:4px}
 .tag.g{background:color-mix(in srgb,var(--kumkum) 13%,transparent);color:var(--kumkum)}
 .tag.b{background:color-mix(in srgb,var(--peacock) 13%,transparent);color:var(--peacock)}
@@ -261,6 +277,9 @@ tr:last-child td{border-bottom:0}
 
     <div class="sec-h"><h2 data-mr="कलाप्रकार" data-en="Event categories"></h2><span id="evcount"></span></div>
     <div class="cats" id="cats"></div>
+
+    <div class="sec-h"><h2 data-mr="सुविधा" data-en="Facilities"></h2><span data-mr="झेरॉक्स व स्वच्छतागृह" data-en="Xerox &amp; washrooms"></span></div>
+    <div class="cards2" id="facilities"></div>
 
     <div class="sec-h"><h2 data-mr="सूचना" data-en="Good to know"></h2></div>
     <div class="note" data-mr="<b>पाऊस आल्यास</b> नाव नोंदणी प्राचार्य म.वि. कौंडिण्य संशोधन भवनाच्या दुसऱ्या व तिसऱ्या मजल्यावर होईल. महाविद्यालय परिसरात पोहोचल्यानंतर फलक व स्वयंसेवकांच्या मदतीने कार्यक्रम स्थळापर्यंत पोहचू शकता." data-en="<b>If it rains,</b> registration moves to the 2nd &amp; 3rd floor of Principal M.V. Kaundinya Research Bhavan. Once inside the campus, follow the signboards and ask any volunteer for your venue."></div>
@@ -665,8 +684,126 @@ function renderLogos(){
   const box = $("#logos"); box.hidden = !l.length;
   box.innerHTML = l.map(x=>`<figure><img src="${x.src}" alt="${esc(x.en)} logo"><figcaption>${esc(T(x))}${x.sub?`<small>${esc(T(x.sub))}</small>`:""}</figcaption></figure>`).join("");
 }
+/* FACILITIES — Xerox centre and washrooms (exact pins). */
+const XEROX = {lat:19.592102024360443, lng:74.19836441666777};
+const WASHROOMS = [
+  {n:1, lat:19.58995412170976,  lng:74.19899056120846},
+  {n:2, lat:19.590577731560614, lng:74.20083547711893},
+  {n:3, lat:19.591445666413133, lng:74.19832335907334},
+  {n:4, lat:19.591578864879402, lng:74.19851950394472},
+  {n:5, lat:19.59152460336217,  lng:74.19875963770366},
+  {n:6, lat:19.591702278557182, lng:74.1982733701249}
+];
+function walkDir(p){ return "https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(p.lat+","+p.lng)+"&travelmode=walking"; }
+function metres(a,b){ // straight-line distance between two pins
+  const R=6371000, r=x=>x*Math.PI/180, dLa=r(b.lat-a.lat), dLo=r(b.lng-a.lng);
+  const s=Math.sin(dLa/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLo/2)**2;
+  return 2*R*Math.asin(Math.sqrt(s));
+}
+function fmtDist(m){ return m<1000 ? Math.round(m)+" m" : (m/1000).toFixed(1)+" km"; }
+
+/* washroom state — st: idle | locating | found | denied | unavailable; open: map shown */
+let WC = {st:"idle", me:null, near:null, dist:{}, open:false};
+function findNearestWashroom(){
+  if(!("geolocation" in navigator) || !window.isSecureContext){ WC.st="unavailable"; renderFacilities(); return; }
+  WC.st="locating"; renderFacilities();
+  navigator.geolocation.getCurrentPosition(pos => {
+    const me={lat:pos.coords.latitude, lng:pos.coords.longitude};
+    const dist={}; WASHROOMS.forEach(w=>dist[w.n]=metres(me,w));
+    const near=WASHROOMS.slice().sort((a,b)=>dist[a.n]-dist[b.n])[0];
+    Object.assign(WC,{st:"found", me, near, dist}); renderFacilities();
+  }, err => { WC.st = err.code===1 ? "denied" : "unavailable"; renderFacilities(); },
+  {enableHighAccuracy:true, timeout:15000, maximumAge:0});
+}
+
+/* map of all washrooms — Leaflet + OpenStreetMap, loaded only when first opened */
+let leafletP = null, wcMap = null;
+function loadLeaflet(){
+  if(window.L) return Promise.resolve();
+  if(leafletP) return leafletP;
+  leafletP = new Promise((ok,fail)=>{
+    const css=document.createElement("link"); css.rel="stylesheet"; css.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"; document.head.appendChild(css);
+    const s=document.createElement("script"); s.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"; s.onload=ok; s.onerror=()=>{ leafletP=null; fail(); }; document.head.appendChild(s);
+  });
+  return leafletP;
+}
+function drawWashroomMap(){
+  const box = document.getElementById("wc-map"); if(!box) return;
+  loadLeaflet().then(()=>{
+    if(!document.body.contains(box)) return;
+    if(wcMap){ wcMap.remove(); wcMap=null; }
+    const mr = LANG==="mr";
+    wcMap = L.map(box, {zoomControl:true, attributionControl:true});
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:20, maxNativeZoom:19, attribution:"© OpenStreetMap"}).addTo(wcMap);
+    const pts = []; let nearMarker = null;
+    WASHROOMS.forEach(w=>{
+      const isNear = WC.near && WC.near.n===w.n;
+      const icon = L.divIcon({className:"", html:`<div class="wc-pin${isNear?" near":""}">${w.n}</div>`, iconSize:[30,30], iconAnchor:[15,15], popupAnchor:[0,-14]});
+      const d = WC.dist[w.n];
+      const pop = `<div class="wc-pop"><b>${mr?"स्वच्छतागृह ":"Washroom "}${w.n}</b>${isNear?`<span class="near-tag">${mr?"सर्वात जवळ":"Nearest"}</span>`:""}
+        ${d!=null?`<div>${fmtDist(d)} ${mr?"दूर":"away"}</div>`:""}
+        <a class="mapbtn" href="${walkDir(w)}" target="_blank" rel="noopener">➤ ${mr?"येथे जा":"Go here"}</a></div>`;
+      const m = L.marker([w.lat,w.lng],{icon, title:(mr?"स्वच्छतागृह ":"Washroom ")+w.n, zIndexOffset:isNear?1000:0}).addTo(wcMap).bindPopup(pop);
+      if(isNear) nearMarker = m;
+      pts.push([w.lat,w.lng]);
+    });
+    if(WC.me){
+      L.circleMarker([WC.me.lat,WC.me.lng],{radius:8, color:"#ffffff", weight:3, fillColor:"#1a73e8", fillOpacity:1}).addTo(wcMap)
+        .bindTooltip(mr?"आपण येथे आहात":"You are here",{direction:"top"});
+      if(WC.near && WC.dist[WC.near.n] < 1500) pts.push([WC.me.lat,WC.me.lng]); // include me only when on campus
+    }
+    wcMap.fitBounds(pts, {padding:[28,28], maxZoom:19});
+    if(nearMarker) nearMarker.openPopup(); // open only after the map has a view
+  }).catch(()=>{
+    box.innerHTML = `<div class="wc-maperr">${LANG==="mr"?"नकाशा लोड झाला नाही (इंटरनेट तपासा). खालील यादी वापरा.":"Map couldn't load (check internet). Use the list below."}</div>`;
+  });
+}
+
+function renderFacilities(){
+  const mr = LANG==="mr";
+  const wName = w => (mr?"स्वच्छतागृह ":"Washroom ")+w.n;
+  const go = (p,label) => `<a class="mapbtn" href="${walkDir(p)}" target="_blank" rel="noopener">➤ ${label||(mr?"मार्ग":"Directions")}</a>`;
+  const order = WC.st==="found" ? WASHROOMS.slice().sort((a,b)=>WC.dist[a.n]-WC.dist[b.n]) : WASHROOMS;
+  const list = `<div class="wlist">${order.map(w=>`<div><span>${wName(w)}${WC.near&&WC.near.n===w.n?` <span class="dist">${mr?"सर्वात जवळ":"Nearest"}</span>`:""}${WC.dist[w.n]!=null?` <small>· ${fmtDist(WC.dist[w.n])}</small>`:""}</span>${go(w)}</div>`).join("")}</div>`;
+  let status = "";
+  if(WC.st==="found") status = `<div class="fac-row"><span>${mr?"आपल्यापासून सर्वात जवळचे:":"Nearest to you:"}</span><b>${wName(WC.near)}</b><span class="dist">${fmtDist(WC.dist[WC.near.n])}</span></div>`
+     + (WC.dist[WC.near.n]>1500?`<small>${mr?"आपण महाविद्यालय परिसरापासून दूर आहात असे दिसते.":"You seem to be away from the campus."}</small>`:"");
+  else if(WC.st==="locating") status = `<small>${mr?"आपले ठिकाण शोधत आहे…":"Finding your location…"}</small>`;
+  else if(WC.st==="denied") status = `<small>${mr?"ठिकाण परवानगी मिळाली नाही — नकाशावरून हवे ते स्वच्छतागृह निवडा.":"Location not allowed — pick any washroom on the map."}</small>`;
+  else if(WC.st==="unavailable") status = `<small>${mr?"आपले ठिकाण मिळाले नाही — नकाशावरून हवे ते स्वच्छतागृह निवडा.":"Couldn't get your location — pick any washroom on the map."}</small>`;
+
+  const wcBody = WC.open
+    ? `${status}
+       <div id="wc-map" class="wc-map" role="region" aria-label="${mr?"स्वच्छतागृह नकाशा":"Washroom map"}"></div>
+       <small>${mr?"नकाशावरील क्रमांकावर टॅप करा → \"येथे जा\" दाबा.":"Tap a numbered pin → press \"Go here\"."}</small>
+       <div class="fac-row">${WC.st!=="locating"?`<button class="mapbtn ghost" id="wc-find">⌖ ${WC.st==="found"?(mr?"पुन्हा शोधा":"Refresh my location"):(mr?"माझ्या जवळचे दाखवा":"Show nearest to me")}</button>`:""}<button class="mapbtn ghost" id="wc-toggle">✕ ${mr?"नकाशा बंद करा":"Close map"}</button></div>
+       ${list}`
+    : `<div>${mr?"परिसरातील सर्व ६ स्वच्छतागृहे नकाशावर पहा आणि हवे तिथे जा.":"See all 6 washrooms on the campus map and choose where to go."}</div>
+       ${status}
+       <div class="fac-row"><button class="mapbtn" id="wc-toggle">🗺 ${mr?"स्वच्छतागृहे नकाशावर पहा":"Show washrooms on map"}</button></div>`;
+
+  $("#facilities").innerHTML = `
+    <div class="mini"><b>${mr?"झेरॉक्स सेंटर":"Xerox Centre"}</b><small>${mr?"Xerox Centre":"झेरॉक्स सेंटर"}</small>
+      <div>${mr?"झेरॉक्स / प्रिंटआउट साठी":"For photocopies and printouts"}</div>
+      <div class="fac-row">${go(XEROX)}</div></div>
+    <div class="mini${WC.open?" wide":""}" id="wc-card"><b>${mr?"स्वच्छतागृह":"Washrooms"}</b><small>${mr?"Washrooms":"स्वच्छतागृह"}</small>${wcBody}</div>`;
+
+  const t = document.getElementById("wc-toggle");
+  if(t) t.onclick = () => {
+    WC.open = !WC.open; renderFacilities();
+    if(WC.open){
+      if(WC.st==="idle") findNearestWashroom();   // ask for location once, to mark "you are here"
+      const c=document.getElementById("wc-card"); if(c) c.scrollIntoView({behavior:"smooth", block:"start"});
+    }
+  };
+  const f = document.getElementById("wc-find"); if(f) f.onclick = findNearestWashroom;
+  if(WC.open) drawWashroomMap(); else if(wcMap){ wcMap.remove(); wcMap=null; }
+}
+// if the visitor already allowed location earlier, work out the nearest washroom quietly
+try{ navigator.permissions && navigator.permissions.query({name:"geolocation"}).then(p=>{ if(p.state==="granted") findNearestWashroom(); }).catch(()=>{}); }catch(e){}
+
 function renderAll(){
-  applyStatic(); renderLogos(); countdown(); renderCats(); renderTabs(); renderEvents(); renderVenues(); renderHelp();
+  applyStatic(); renderLogos(); countdown(); renderCats(); renderTabs(); renderEvents(); renderVenues(); renderHelp(); renderFacilities();
   $("#q-college").href = mapsDir(null);
 }
 
