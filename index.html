@@ -278,7 +278,7 @@ button.mapbtn{border:0;font:inherit;font-weight:700;font-size:.85rem;cursor:poin
     <div class="sec-h"><h2 data-mr="कलाप्रकार" data-en="Event categories"></h2><span id="evcount"></span></div>
     <div class="cats" id="cats"></div>
 
-    <div class="sec-h"><h2 data-mr="सुविधा" data-en="Facilities"></h2><span data-mr="झेरॉक्स व स्वच्छतागृह" data-en="Xerox &amp; washrooms"></span></div>
+    <div class="sec-h"><h2 data-mr="सुविधा" data-en="Facilities"></h2><span data-mr="भोजन, झेरॉक्स व स्वच्छतागृह" data-en="Lunch, Xerox &amp; washrooms"></span></div>
     <div class="cards2" id="facilities"></div>
 
     <div class="sec-h"><h2 data-mr="सूचना" data-en="Good to know"></h2></div>
@@ -685,6 +685,7 @@ function renderLogos(){
   box.innerHTML = l.map(x=>`<figure><img src="${x.src}" alt="${esc(x.en)} logo"><figcaption>${esc(T(x))}${x.sub?`<small>${esc(T(x.sub))}</small>`:""}</figcaption></figure>`).join("");
 }
 /* FACILITIES — Xerox centre and washrooms (exact pins). */
+const LUNCH = {lat:19.592323606618116, lng:74.19916217421267};
 const XEROX = {lat:19.592102024360443, lng:74.19836441666777};
 const WASHROOMS = [
   {n:1, lat:19.58995412170976,  lng:74.19899056120846},
@@ -783,6 +784,9 @@ function renderFacilities(){
        <div class="fac-row"><button class="mapbtn" id="wc-toggle">🗺 ${mr?"स्वच्छतागृहे नकाशावर पहा":"Show washrooms on map"}</button></div>`;
 
   $("#facilities").innerHTML = `
+    <div class="mini"><b>${mr?"भोजन व्यवस्था":"Lunch"}</b><small>${mr?"Lunch":"भोजन व्यवस्था"}</small>
+      <div>${mr?"दुपारच्या जेवणाचे ठिकाण":"Where lunch is served"}</div>
+      <div class="fac-row">${go(LUNCH)}</div></div>
     <div class="mini"><b>${mr?"झेरॉक्स सेंटर":"Xerox Centre"}</b><small>${mr?"Xerox Centre":"झेरॉक्स सेंटर"}</small>
       <div>${mr?"झेरॉक्स / प्रिंटआउट साठी":"For photocopies and printouts"}</div>
       <div class="fac-row">${go(XEROX)}</div></div>
